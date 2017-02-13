@@ -10,7 +10,7 @@ from time import time, sleep
 
 
 def run_PID(set_point=100, start_point=0,
-            K_p=0.5, K_i=0, K_d=0.1, length=5, force=0):
+            K_p=0.5, K_i=0, K_d=0.1, length=5, force=0, max_out=20):
     start_time = time()
     point = start_point
     points = [start_point]
@@ -35,6 +35,10 @@ def run_PID(set_point=100, start_point=0,
         derivative = (error - last_error)/time_dif
 
         out = error*K_p + integral*K_i + derivative*K_d
+        if (out > max_out):
+            out = max_out
+        elif (out < -max_out):
+            out = -max_out
         # print(out)
 
         last_error = error
