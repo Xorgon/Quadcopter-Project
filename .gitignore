@@ -41,7 +41,7 @@
 .idea/tasks.xml
 
 # Miscellaneous IDE stuff.
-.idea/Odometry-Task.iml
+.idea/Quadcopter-Project.iml
 .idea/misc.xml
 .idea/misc.xml
 .idea/modules.xml
@@ -82,3 +82,4 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+.idea/
