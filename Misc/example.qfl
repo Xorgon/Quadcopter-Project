@@ -1,9 +1,9 @@
-[System] Log start: 18:09:06 13/02/2017
-[Instruments] Gyro readings: xyzxyz
-[Instruments] Location: -1.01, -0.52, 0.92
-[Grabber] Released: 18:09:22
-[Autopilot] Error: -1.01, -0.52, 0.92
-[Autopilot] Pitch: 2, Roll: 5, Yaw: 0, Throttle: 42%
-[Receiver] Autopilot disabled.
-[Receiver] Shutdown command received.
-[System] Shutting down.
+[00:02.21][System] Startup.
+[00:03.23][Instruments] Gyro readings: xyzxyz
+[00:04.54][Instruments] Location: -1.01, -0.52, 0.92
+[00:25.12][Grabber] Released.
+[00:26.14][Autopilot] Error: -1.01, -0.52, 0.92
+[00:26.16][Autopilot] Pitch: 2, Roll: 5, Yaw: 0, Throttle: 42%
+[00:27.11][Receiver] Autopilot disabled.
+[00:30.09][Receiver] Shutdown command received.
+[00:30.11][System] Shutting down.

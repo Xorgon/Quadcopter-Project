@@ -7,15 +7,19 @@
 
 #include <Arduino.h>
 #include <SD.h>
+#include <math.h>
 
 class Logger {
 public:
-    Logger();
+    Logger(int sdPin);
 
     log(char tag[], char data[]);
 
+    String parseMillis(int millis);
+
 private:
-    File logFile;
+
+    String logName;
 };
 
 #endif //QUADCOPTER_PROJECT_LOGGER_H
