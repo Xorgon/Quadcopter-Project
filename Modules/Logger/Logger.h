@@ -7,7 +7,6 @@
 
 #include <Arduino.h>
 #include <SD.h>
-#include <math.h>
 
 class Logger {
 public:

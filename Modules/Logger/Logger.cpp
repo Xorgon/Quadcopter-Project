@@ -50,11 +50,12 @@ String Logger::parseMillis(uint32_t millis) {
 String Logger::getNextName() {
     File dir = SD.open("/" + dir);
     int maxFlightN = 0;
-    while (dir.available() > 0){
+    while (dir.available() > 0) {
         File file = dir.openNextFile();
         String name = file.name();
-        if (name.substring(0,6) == "flight") {
-            flightN = name.substring(6,9).toInt();
+        int len = name.length();
+        if (name.substring(len - 4, len) == "qfl") {
+            int flightN = name.substring(6, 9).toInt();
             if (flightN > maxFlightN) {
                 maxFlightN = flightN;
             }
