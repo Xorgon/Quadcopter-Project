@@ -13,4 +13,5 @@ void setup() {
 
 void loop() {
     logger.log("Test", "POOP FARTS");
+    delay(1000);
 }
