@@ -5,8 +5,12 @@
 #include <iostream>
 #include <cstring>
 
-int main(){
-    char str[80] = "asdfasdfasdf";
-    std::cout << strcat(str, "asdfasdf") << std::endl;
+int main() {
+    std::cout << 15501 % 60000 << std::endl;
+    int center = 5;
+    for (int i = 0; i < 5; i++) {
+        int led1 = center + i;
+        int led2 = center - i;
+    }
     return 0;
 }

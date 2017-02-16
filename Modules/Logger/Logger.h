@@ -11,15 +11,20 @@
 
 class Logger {
 public:
-    Logger(int sdPin);
+    Logger(int sdChipSelect);
 
-    log(char tag[], char data[]);
+    Logger();
 
-    String parseMillis(int millis);
+    void log(String tag, String data);
+
+    String parseMillis(uint32_t millis);
 
 private:
 
     String logName;
+    String logDir;
+
+    String getNextName();
 };
 
 #endif //QUADCOPTER_PROJECT_LOGGER_H
