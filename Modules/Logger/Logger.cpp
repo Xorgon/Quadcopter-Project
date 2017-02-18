@@ -9,17 +9,22 @@ Logger::Logger(int sdChipSelect) {
     logName = getNextName();
     Serial.println("Logging to: " + logName + ".QFL");
     logDir = "logs";
+    toWrite.reserve(128);
     log("System", "Startup.");
 }
 
 Logger::Logger() {};
 
 void Logger::log(String tag, String data) {
-    String logLine = "[" + parseMillis(millis()) + "][" + tag + "] " + data;
-    Serial.println(logLine);
-    File logFile = SD.open("/" + logDir + "/" + logName + ".qfl", FILE_WRITE);
-    logFile.println(logLine);
-    logFile.close();
+    String logLine = "[" + parseMillis(millis()) + "][" + tag + "] " + data + "\n";
+    if (toWrite.length() + logLine.length() > 128) {
+        Serial.print(toWrite);
+        File logFile = SD.open("/" + logDir + "/" + logName + ".qfl", O_CREAT | O_WRITE);
+        logFile.print(toWrite);
+        logFile.close();
+        toWrite = "";
+    }
+    toWrite += logLine;
 }
 
 

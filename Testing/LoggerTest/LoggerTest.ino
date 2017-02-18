@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <Logger.h>
+#include <SD.h>
 
 Logger logger;
 const int sdChipSelect = 10;
@@ -13,5 +14,5 @@ void setup() {
 
 void loop() {
     logger.log("Test", "POOP FARTS");
-    delay(1000);
+    logger.log("Farts", "A different length string");
 }

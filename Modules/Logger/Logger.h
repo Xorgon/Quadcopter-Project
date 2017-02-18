@@ -22,6 +22,7 @@ private:
 
     String logName;
     String logDir;
+    String toWrite;
 
     String getNextName();
 };
