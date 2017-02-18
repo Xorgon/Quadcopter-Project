@@ -4,6 +4,10 @@
 
 #include "Logger.h"
 
+/**
+ * Initializes Logger object.
+ * @param sdChipSelect The SD chipSelect value, 10 for an UNO.
+ */
 Logger::Logger(int sdChipSelect) {
     SD.begin(sdChipSelect);
     logName = getNextName();
@@ -13,8 +17,16 @@ Logger::Logger(int sdChipSelect) {
     log("System", "Startup.");
 }
 
+/**
+ * Allows for creation of a Logger variable without initialization.
+ */
 Logger::Logger() {};
 
+/**
+ * Prepares data for logging and writes to an SD card and Serial monitor when buffer is full.
+ * @param tag The name of the module calling the function.
+ * @param data The data to be logged.
+ */
 void Logger::log(String tag, String data) {
     String logLine = "[" + parseMillis(millis()) + "][" + tag + "] " + data + "\n";
     if (toWrite.length() + logLine.length() > 128) {
@@ -27,7 +39,11 @@ void Logger::log(String tag, String data) {
     toWrite += logLine;
 }
 
-
+/**
+ * Parses the given millis into a human-readable format.
+ * @param millis The millis to be parsed. e.g. millis()
+ * @return String with the format [mm:ss.ss]. e.g. [01:32.11]
+ */
 String Logger::parseMillis(uint32_t millis) {
     uint8_t mins = floor(millis / 60000);
     String sMins;
@@ -53,8 +69,12 @@ String Logger::parseMillis(uint32_t millis) {
     return sMins + ":" + sSecs + "." + sDecimalSecs;
 }
 
+/**
+ * Gets the next log file name in directory logDir.
+ * @return Log file name. e.g. "FLIGHT9"
+ */
 String Logger::getNextName() {
-    File dir = SD.open("/logs/");
+    File dir = SD.open("/" + logDir + "/");
     int maxFlightN = 0;
     while (true) {
         File file = dir.openNextFile();

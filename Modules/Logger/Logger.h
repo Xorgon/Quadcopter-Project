@@ -8,6 +8,17 @@
 #include <Arduino.h>
 #include <SD.h>
 
+/**
+ * Allows for easy logging of information to the SD card and to the Serial monitor using log().
+ *
+ * The Logger writes "FLIGHTX.QFL" (Quadcopter Flight Log) files to the logDir folder on the SD card.
+ *
+ * The flights are numerically ordered, so the first flight would be FLIGHT1.QFL.
+ *
+ * \see Logger::log() for logging data.
+ *
+ * @author Elijah Andrews
+ */
 class Logger {
 public:
     Logger(int sdChipSelect);
