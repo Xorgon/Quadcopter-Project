@@ -15,4 +15,5 @@ void setup() {
 void loop() {
     logger.log("Test", "POOP FARTS");
     logger.log("Farts", "A different length string");
+    logger.logFile.flush();
 }

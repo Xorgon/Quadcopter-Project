@@ -29,10 +29,11 @@ public:
 
     String parseMillis(uint32_t millis);
 
+    File logFile;
+
 private:
 
     String logName;
-    String toWrite;
 
     String getNextName();
 };
