@@ -12,7 +12,6 @@ Logger::Logger(int sdChipSelect) {
     SD.begin(sdChipSelect);
     logName = getNextName();
     Serial.println("Logging to: " + logName + ".QFL");
-    logDir = "logs";
     toWrite.reserve(128);
     log("System", "Startup.");
 }
@@ -31,7 +30,7 @@ void Logger::log(String tag, String data) {
     String logLine = "[" + parseMillis(millis()) + "][" + tag + "] " + data + "\n";
     if (toWrite.length() + logLine.length() > 128) {
         Serial.print(toWrite);
-        File logFile = SD.open("/" + logDir + "/" + logName + ".qfl", O_CREAT | O_WRITE);
+        File logFile = SD.open("/logs/" + logName + ".qfl", O_CREAT | O_WRITE);
         logFile.print(toWrite);
         logFile.close();
         toWrite = "";
@@ -74,7 +73,7 @@ String Logger::parseMillis(uint32_t millis) {
  * @return Log file name. e.g. "FLIGHT9"
  */
 String Logger::getNextName() {
-    File dir = SD.open("/" + logDir + "/");
+    File dir = SD.open("/logs/");
     int maxFlightN = 0;
     while (true) {
         File file = dir.openNextFile();
