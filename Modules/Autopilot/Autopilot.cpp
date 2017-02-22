@@ -23,7 +23,7 @@ float* Autopilot::calculate(float *tar, float *loc) {
     float errY = tar[1] - loc[1];
     float errZ = tar[2] - loc[2];
 
-    // Check if there has been no previous value of error.
+    // Check if there has been no previous value of error, 999 is arbitrary value set at initialization.
     if (lastErrX == 999) {
         lastErrX = errX;
     }
@@ -39,8 +39,8 @@ float* Autopilot::calculate(float *tar, float *loc) {
     float pdOutY = Kp[1] * errY + Kd[1] * (errY - lastErrY);
     float pdOutZ = Kp[2] * errZ + Kd[2] * (errZ - lastErrZ);
 
-    // Sideways thrust will be proportional to the sin of the pitch/roll angle.
-    // pdOut gives the thrust, so asin is used to make it correctly proportional.
+    // Sideways acceleration will be proportional to the sin of the pitch/roll angle.
+    // pdOut gives the acceleration, so asin is used to make the angle correctly proportional.
     float pitch = asin(pdOutX); //TODO: Make a proportionality factor to give correct degrees.
     float roll = asin(pdOutY);
 
