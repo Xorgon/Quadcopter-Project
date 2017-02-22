@@ -14,14 +14,20 @@ public:
 
     Autopilot(Logger logger);
 
-    void calculate(float target[], float location[]);
+    float* calculate(float target[], float location[]);
 
 private:
     float maxPitch;
     float maxRoll;
     float maxThrottle;
-    float Kp;
-    float Kd;
+    float Kp[];
+    float Kd[];
+
+
+    float lastErrX;
+    float lastErrY;
+    float lastErrZ;
+
     Logger logger;
     String loggerTag = "Autopilot";
 

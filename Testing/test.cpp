@@ -4,13 +4,15 @@
 
 #include <iostream>
 #include <cstring>
+#include <Autopilot.h>
 
 int main() {
-    std::cout << 15501 % 60000 << std::endl;
-    int center = 5;
-    for (int i = 0; i < 5; i++) {
-        int led1 = center + i;
-        int led2 = center - i;
-    }
+    Autopilot autopilot = Autopilot();
+    float loc[] = {1.0, 1.0, 1.0};
+    float tar[] = {0.0, 0.0, 0.0};
+    float *out = autopilot.calculate(tar, loc);
+
+    std::cout << *out << std::endl;
+    
     return 0;
 }
