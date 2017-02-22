@@ -36,6 +36,7 @@ private:
     String logName;
 
     String getNextName();
+
 };
 
 #endif //QUADCOPTER_PROJECT_LOGGER_H
