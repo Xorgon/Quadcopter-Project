@@ -3,7 +3,6 @@
 //
 
 #include "Autopilot.h"
-#include "math.h"
 
 Autopilot::Autopilot() {}
 

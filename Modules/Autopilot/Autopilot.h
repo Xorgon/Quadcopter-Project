@@ -7,6 +7,7 @@
 
 #include <Arduino.h>
 #include <Logger.h>
+#include <math.h>
 
 class Autopilot {
 public:
