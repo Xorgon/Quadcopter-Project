@@ -13,15 +13,14 @@ void setup() {
 }
 
 void loop() {
-    logger.log("Test", "1 POOP FARTS");
-    logger.log("Farts", "A different length string");
-    logger.log("Test", "2 POOP FARTS");
-    logger.log("Test", "3 POOP FARTS");
-    logger.log("Test", "4 POOP FARTS");
-    logger.log("Test", "5 POOP FARTS");
-    logger.log("Test", "6 POOP FARTS");
-    logger.log("Test", "7 POOP FARTS");
-    logger.log("Test", "8 POOP FARTS");
-    logger.log("Test", "9 POOP FARTS");
+    logger.log("Farm", "1 Chicken");
+    logger.log("Farm", "2 Pigs");
+    logger.log("Farm", "3 Dogs");
+    logger.log("Farm", "4 Sheep");
+    logger.log("Farm", "5 Cows");
+    logger.log("Farm", "6 Alpacas");
+    logger.log("Farm", "7 Goats");
+    logger.log("Farm", "8 Turkeys");
+    logger.log("Farm", "9 Horses");
     logger.logFile.flush();
 }
