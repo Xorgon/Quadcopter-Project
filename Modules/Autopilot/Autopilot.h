@@ -36,6 +36,7 @@ private:
     int lastPWMTime = 0;
     int pwmValue = 0;
     int pwmTolerance = 5; //TODO: Calibrate.
+    uint8_t activePin = 10;
 
     void sendToController(float pitch, float roll, float yaw, float throttle);
 

@@ -19,6 +19,9 @@ Autopilot::Autopilot(Logger logger) {
 
     // Interrupt on digital pin 2 (interrupt 0).
     attachInterrupt(0, onRising, RISING);
+
+    pinMode(activePin, OUTPUT);
+    digitalWrite(activePin, LOW);
 }
 
 float *Autopilot::calculate(float *tar, float *loc) {
@@ -67,8 +70,8 @@ void Autopilot::onFalling() {
     attachInterrupt(0, onRising, RISING);
     pwmValue = micros() - lastPWMTime;
     if (pwmValue > (activePWM - pwmTolerance) and pwmValue < (activePWM + pwmTolerance)) {
-        // TODO: Set active.
+        digitalWrite(activePin, HIGH);
     } else {
-        // TODO: Set inactive.
+        digitalWrite(activePin, LOW);
     }
 }
