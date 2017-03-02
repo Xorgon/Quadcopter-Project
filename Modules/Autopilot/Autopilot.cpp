@@ -16,9 +16,12 @@ Autopilot::Autopilot(Logger logger) {
     lastErrX = 999;
     lastErrY = 999;
     lastErrZ = 999;
+
+    // Interrupt on digital pin 2 (interrupt 0).
+    attachInterrupt(0, onRising, RISING);
 }
 
-float* Autopilot::calculate(float *tar, float *loc) {
+float *Autopilot::calculate(float *tar, float *loc) {
     float errX = tar[0] - loc[0];
     float errY = tar[1] - loc[1];
     float errZ = tar[2] - loc[2];
@@ -53,4 +56,19 @@ float* Autopilot::calculate(float *tar, float *loc) {
     if (throttle > maxThrottle) { throttle = maxThrottle; }
 
     return {pitch, roll, throttle};
+}
+
+void Autopilot::onRising() {
+    attachInterrupt(0, onFalling, FALLING);
+    lastPWMTime = micros();
+}
+
+void Autopilot::onFalling() {
+    attachInterrupt(0, onRising, RISING);
+    pwmValue = micros() - lastPWMTime;
+    if (pwmValue > (activePWM - pwmTolerance) and pwmValue < (activePWM + pwmTolerance)) {
+        // TODO: Set active.
+    } else {
+        // TODO: Set inactive.
+    }
 }

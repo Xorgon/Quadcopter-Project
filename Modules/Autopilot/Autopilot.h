@@ -32,7 +32,16 @@ private:
     Logger logger;
     String loggerTag = "Autopilot";
 
+    int activePWM = 1111; //TODO: Find actual value.
+    int lastPWMTime = 0;
+    int pwmValue = 0;
+    int pwmTolerance = 5; //TODO: Calibrate.
+
     void sendToController(float pitch, float roll, float yaw, float throttle);
+
+    void onRising();
+    void onFalling();
+
 };
 
 
