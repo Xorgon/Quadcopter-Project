@@ -71,7 +71,9 @@ void Autopilot::onFalling() {
     pwmValue = micros() - lastPWMTime;
     if (pwmValue > (activePWM - pwmTolerance) and pwmValue < (activePWM + pwmTolerance)) {
         digitalWrite(activePin, HIGH);
+        logger.log("Autopilot", "Autopilot activated.");
     } else {
         digitalWrite(activePin, LOW);
+        logger.log("Autopilot", "Autopilot deactivated.");
     }
 }
