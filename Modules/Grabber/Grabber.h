@@ -1,4 +1,6 @@
-// Created by Elijah Andrews on behalf of Team A
+//
+// Created by Elijah on 07/03/2017.
+//
 
 #ifndef SKETCH_DISPENSE_H
 #define SKETCH_DISPENSE_H
@@ -14,18 +16,20 @@ public:
 
     Grabber(int servoPin, Logger logger);
 
-    void moveTo(int loc);
-
-    void release();
-
     void run(float pos[], float target[]);
 
 private:
     int pos;
+
     // Positional tolerance in meters.
     float posTolerance = 0.1;
+
     Servo servo;
     Logger logger;
+
+    void moveTo(int loc);
+
+    void release();
 };
 
 #endif //SKETCH_DISPENSE_H
