@@ -8,6 +8,7 @@
 #include <Arduino.h>
 #include <Logger.h>
 #include <math.h>
+#include "Servo.h"
 
 class Autopilot {
 public:
@@ -38,9 +39,15 @@ private:
     uint8_t pwmTolerance = 100;
     uint8_t activePin = 10;
 
+    Servo pitchPWM;
+    Servo yawPWM;
+    Servo rollPWM;
+    Servo throttlePWM;
+
     void sendToController(float pitch, float roll, float yaw, float throttle);
 
     void onRising();
+
     void onFalling();
 
 };

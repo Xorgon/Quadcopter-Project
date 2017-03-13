@@ -17,6 +17,11 @@ Autopilot::Autopilot(Logger logger) {
     lastErrY = 999;
     lastErrZ = 999;
 
+    pitchPWM.attach(10);
+    rollPWM.attach(11);
+    yawPWM.attach(12);
+    throttlePWM.attach(13);
+
     // Interrupt on digital pin 2 (interrupt 0).
     attachInterrupt(0, onRising, RISING);
 
