@@ -2,6 +2,10 @@
 // Created by Elijah on 16/02/2017.
 //
 
+// TODO: Yaw PI controller.
+// TODO: Change to output a proportional PWM rather than angles.
+// TODO: Change throttle to use read pitch, roll, rather than using the intended.
+
 #include "Autopilot.h"
 
 Autopilot::Autopilot() {}
@@ -10,8 +14,6 @@ Autopilot::Autopilot(Logger logger) {
     this->logger = logger;
     maxPitch = 30;
     maxRoll = 30;
-    Kp = {0.3, 0.3, 0.3};
-    Kd = {0.1, 0.1, 0.1};
 
     lastErrX = 999;
     lastErrY = 999;
@@ -23,7 +25,7 @@ Autopilot::Autopilot(Logger logger) {
     throttlePWM.attach(13);
 
     // Interrupt on digital pin 2 (interrupt 0).
-    attachInterrupt(0, onRising, RISING);
+//    attachInterrupt(0, this->onRising, RISING);
 
     pinMode(activePin, OUTPUT);
     digitalWrite(activePin, LOW);
@@ -52,8 +54,8 @@ float *Autopilot::calculate(float *tar, float *loc) {
 
     // Sideways acceleration will be proportional to the sin of the pitch/roll angle.
     // pdOut gives the acceleration, so asin is used to make the angle correctly proportional.
-    float pitch = asin(pdOutX); //TODO: Make a proportionality factor to give correct degrees.
-    float roll = asin(pdOutY);
+    float pitch = 1500 + asin(pdOutX); //TODO: Make a proportionality factor to give correct degrees.
+    float roll = 1500 + asin(pdOutY);
 
     if (pitch > maxPitch) { pitch = maxPitch; }
     if (roll > maxRoll) { roll = maxRoll; }
@@ -63,16 +65,18 @@ float *Autopilot::calculate(float *tar, float *loc) {
 
     if (throttle > maxThrottle) { throttle = maxThrottle; }
 
-    return {pitch, roll, throttle};
+    return; // {pitch, roll, throttle}; TODO: Outputs.
 }
 
+
+//TODO: Fix these interrupt call functions so that they actually work.
 void Autopilot::onRising() {
-    attachInterrupt(0, onFalling, FALLING);
+    attachInterrupt(0, this->onFalling, FALLING);
     lastPWMTime = micros();
 }
 
 void Autopilot::onFalling() {
-    attachInterrupt(0, onRising, RISING);
+    attachInterrupt(0, this->onRising, RISING);
     pwmValue = micros() - lastPWMTime;
     if (pwmValue > (activePWM - pwmTolerance) and pwmValue < (activePWM + pwmTolerance)) {
         digitalWrite(activePin, HIGH);
