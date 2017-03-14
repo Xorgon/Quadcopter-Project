@@ -10,10 +10,10 @@
  */
 Logger::Logger(int sdChipSelect) {
     SD.begin(sdChipSelect);
-    logName = getNextName();
+    String logName = getNextName();
     Serial.println("Logging to: " + logName + ".QFL");
     logFile = SD.open("/logs/" + logName + ".qfl", O_CREAT | O_WRITE);
-    log("System", "Startup.");
+    log(F("Logger"), F("Started."));
 }
 
 /**
@@ -67,7 +67,7 @@ String Logger::parseMillis(uint32_t millis) {
  * @return Log file name. e.g. "FLIGHT9"
  */
 String Logger::getNextName() {
-    File dir = SD.open("/logs/");
+    File dir = SD.open(F("/logs/"));
     int maxFlightN = 0;
     while (true) {
         File file = dir.openNextFile();
@@ -77,9 +77,9 @@ String Logger::getNextName() {
         }
         String name = file.name();
         int len = name.length();
-        if (name.substring(len - 3, len) == "QFL") {
-            name.replace("FLIGHT", "");
-            name.replace(".QFL", "");
+        if (name.substring(len - 3, len) == F("QFL")) {
+            name.replace(F("FLIGHT"), F(""));
+            name.replace(F(".QFL"), F(""));
             int flightN = name.toInt();
             if (flightN > maxFlightN) {
                 maxFlightN = flightN;

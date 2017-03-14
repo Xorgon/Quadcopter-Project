@@ -19,9 +19,9 @@ public:
     float *calculate(float target[], float location[]);
 
 private:
-    float maxPitch;
-    float maxRoll;
-    float maxThrottle;
+    uint8_t maxPitch;
+    uint8_t maxRoll;
+    uint8_t maxThrottle;
     float Kp[3] = {0.1, 0.1, 0.1};
     float Kd[3] = {0.3, 0.3, 0.3};
 

@@ -1,0 +1,22 @@
+Blank: 9
+SD: 789, +780
+Logger import: 789, +0
+Logger, field: 850, +61
+Logger, initialized: 940, +90
+Full Logger + Autopilot import: 981, +41
+Full Logger + Autopilot, field: 1125, +144
+Full Logger + Autopilot, initialized: 1125, +0
+
+
+SdFat import: 15, +6
+SdFat, SD field: 615, +600
+Logger import: 188
+Logger, field: 860 
+Logger, initialized: 988  
+
+bytes saved:
+9
+6
+14
+------
+29
