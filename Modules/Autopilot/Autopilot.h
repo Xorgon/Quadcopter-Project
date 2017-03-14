@@ -19,19 +19,26 @@ public:
     float *calculate(float target[], float location[]);
 
 private:
-    uint8_t maxPitch;
-    uint8_t maxRoll;
-    uint8_t maxThrottle;
-    float Kp[3] = {0.1, 0.1, 0.1};
-    float Kd[3] = {0.3, 0.3, 0.3};
 
+#define maxPitch 30
+#define maxRoll 30
+#define maxThrottle 100
+
+#define KP_X 0.1
+#define KP_Y 0.1
+#define KP_Z 0.1
+
+#define KD_X 0.3
+#define KD_Y 0.3
+#define KD_Z 0.3
 
     float lastErrX;
     float lastErrY;
     float lastErrZ;
 
     Logger *logger;
-    String loggerTag = "Autopilot";
+
+#define AUTOPILOT_LOGGER_TAG "Autopilot"
 
     uint16_t activePWM = 1900; //TODO: Test activePWM value.
     volatile unsigned long lastPWMTime = 0;

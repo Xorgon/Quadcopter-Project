@@ -12,8 +12,6 @@ Autopilot::Autopilot() {}
 
 Autopilot::Autopilot(Logger *logger) {
     this->logger = logger;
-    maxPitch = 30;
-    maxRoll = 30;
 
     lastErrX = 999;
     lastErrY = 999;
@@ -48,9 +46,9 @@ float *Autopilot::calculate(float *tar, float *loc) {
     }
 
     //TODO: Correctly define the coordinate system in relation to the aircraft.
-    float pdOutX = Kp[0] * errX + Kd[0] * (errX - lastErrX);
-    float pdOutY = Kp[1] * errY + Kd[1] * (errY - lastErrY);
-    float pdOutZ = Kp[2] * errZ + Kd[2] * (errZ - lastErrZ);
+    float pdOutX = KP_X * errX + KD_X * (errX - lastErrX);
+    float pdOutY = KP_Y * errY + KD_Y * (errY - lastErrY);
+    float pdOutZ = KP_Z * errZ + KD_Z * (errZ - lastErrZ);
 
     // Sideways acceleration will be proportional to the sin of the pitch/roll angle.
     // pdOut gives the acceleration, so asin is used to make the angle correctly proportional.
