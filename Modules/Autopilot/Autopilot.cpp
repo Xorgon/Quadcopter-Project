@@ -10,7 +10,7 @@
 
 Autopilot::Autopilot() {}
 
-Autopilot::Autopilot(Logger logger) {
+Autopilot::Autopilot(Logger *logger) {
     this->logger = logger;
     maxPitch = 30;
     maxRoll = 30;
@@ -80,9 +80,9 @@ void Autopilot::onFalling() {
     pwmValue = micros() - lastPWMTime;
     if (pwmValue > (activePWM - pwmTolerance) and pwmValue < (activePWM + pwmTolerance)) {
         digitalWrite(activePin, HIGH);
-        logger.log("Autopilot", "Autopilot activated.");
+        *logger.log("Autopilot", "Autopilot activated.");
     } else {
         digitalWrite(activePin, LOW);
-        logger.log("Autopilot", "Autopilot deactivated.");
+        *logger.log("Autopilot", "Autopilot deactivated.");
     }
 }

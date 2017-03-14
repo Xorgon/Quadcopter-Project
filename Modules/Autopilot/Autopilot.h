@@ -14,7 +14,7 @@ class Autopilot {
 public:
     Autopilot();
 
-    Autopilot(Logger logger);
+    Autopilot(Logger *logger);
 
     float *calculate(float target[], float location[]);
 
@@ -30,7 +30,7 @@ private:
     float lastErrY;
     float lastErrZ;
 
-    Logger logger;
+    Logger *logger;
     String loggerTag = "Autopilot";
 
     uint16_t activePWM = 1900; //TODO: Test activePWM value.
