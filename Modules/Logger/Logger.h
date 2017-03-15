@@ -29,7 +29,6 @@ public:
 
     String parseMillis(uint32_t millis);
 
-
 private:
 
     File logFile;

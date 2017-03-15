@@ -26,6 +26,7 @@ Logger::Logger() {};
  * @param tag The name of the module calling the function.
  * @param data The data to be logged.
  */
+ // TODO: Make log() automatically flush when the buffer is full.
 void Logger::log(String tag, String data) {
     String logLine = "[" + parseMillis(millis()) + "][" + tag + "] " + data + "\n";
     Serial.print(logLine);
@@ -85,6 +86,10 @@ String Logger::getNextName() {
                 maxFlightN = flightN;
             }
         }
+    }
+    if (maxFlightN >= 15) {
+        Serial.println(F("WARNING: EMPTY FLIGHT LOGS FOR NEW FLIGHT LOGS TO BE CREATED."));
+        maxFlightN = 15;
     }
     return "FLIGHT" + String(maxFlightN + 1);
 }
