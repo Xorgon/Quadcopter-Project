@@ -10,15 +10,24 @@
 #include <math.h>
 #include "Servo.h"
 
+//TODO: Make these a thing.
+extern volatile unsigned long lastPWMTime;
+extern volatile uint16_t pwmValue;
+extern volatile bool autopilotActive;
+
 class Autopilot {
 public:
     Autopilot();
 
     Autopilot(Logger *logger);
 
+    void run();
+
     float *calculate(float target[], float location[]);
 
 private:
+
+    bool lastActive;
 
 #define maxPitch 30
 #define maxRoll 30
@@ -40,11 +49,10 @@ private:
 
 #define AUTOPILOT_LOGGER_TAG "Autopilot"
 
-    uint16_t activePWM = 1900; //TODO: Test activePWM value.
-    volatile unsigned long lastPWMTime = 0;
-    volatile uint16_t pwmValue = 0;
-    uint8_t pwmTolerance = 100;
-    uint8_t activePin = 10;
+// TODO: Test with transmitter/receiver setup.
+#define ACTIVE_PWM 1900
+#define ACTIVE_PWM_TOLERANCE 100
+#define ACTIVE_PIN 10
 
     Servo pitchPWM;
     Servo yawPWM;
@@ -53,9 +61,9 @@ private:
 
     void sendToController(float pitch, float roll, float yaw, float throttle);
 
-    void onRising();
+    static void onRising();
 
-    void onFalling();
+    static void onFalling();
 
 };
 

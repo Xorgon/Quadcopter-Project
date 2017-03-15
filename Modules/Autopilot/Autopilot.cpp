@@ -22,11 +22,24 @@ Autopilot::Autopilot(Logger *logger) {
     yawPWM.attach(7);
     throttlePWM.attach(8);
 
-    // Interrupt on digital pin 2 (interrupt 0).
-//    attachInterrupt(0, this->onRising, RISING);
+    attachInterrupt(0, onRising, RISING);
 
-    pinMode(activePin, OUTPUT);
-    digitalWrite(activePin, LOW);
+    autopilotActive = false;
+    lastActive = false;
+
+    pinMode(ACTIVE_PIN, OUTPUT);
+    digitalWrite(ACTIVE_PIN, LOW);
+}
+
+void Autopilot::run() {
+    if (lastActive != autopilotActive) {
+        lastActive = autopilotActive;
+        if (autopilotActive) {
+            logger->log(AUTOPILOT_LOGGER_TAG, "Autopilot activated.");
+        } else {
+            logger->log(AUTOPILOT_LOGGER_TAG, "Autopilot deactivated.");
+        }
+    }
 }
 
 float *Autopilot::calculate(float *tar, float *loc) {
@@ -68,19 +81,20 @@ float *Autopilot::calculate(float *tar, float *loc) {
 
 
 //TODO: Fix these interrupt call functions so that they actually work.
-void Autopilot::onRising() {
-    attachInterrupt(0, this->onFalling, FALLING);
+static void Autopilot::onRising() {
+    attachInterrupt(0, onFalling, FALLING);
     lastPWMTime = micros();
 }
 
-void Autopilot::onFalling() {
-    attachInterrupt(0, this->onRising, RISING);
+static void Autopilot::onFalling() {
+    attachInterrupt(0, onRising, RISING);
     pwmValue = micros() - lastPWMTime;
-    if (pwmValue > (activePWM - pwmTolerance) and pwmValue < (activePWM + pwmTolerance)) {
-        digitalWrite(activePin, HIGH);
-        *logger.log("Autopilot", "Autopilot activated.");
+    if (pwmValue > (ACTIVE_PWM - ACTIVE_PWM_TOLERANCE)
+        and pwmValue < (ACTIVE_PWM + ACTIVE_PWM_TOLERANCE)) {
+        digitalWrite(ACTIVE_PIN, HIGH);
+        autopilotActive = true;
     } else {
-        digitalWrite(activePin, LOW);
-        *logger.log("Autopilot", "Autopilot deactivated.");
+        digitalWrite(ACTIVE_PIN, LOW);
+        autopilotActive = false;
     }
 }
