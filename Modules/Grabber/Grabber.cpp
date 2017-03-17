@@ -14,33 +14,11 @@ Grabber::Grabber() {}
  * @param servoPin The pin to which the servo is connected.
  * @param logger The logger being used.
  */
-Grabber::Grabber(int servoPin, Logger logger) {
-    pos = 0;
+Grabber::Grabber(int servoPin, Logger *logger) {
     servo = Servo();
     servo.attach(servoPin);
     servo.write(0);
     this->logger = logger;
-}
-
-/**
- * Moves the servo smoothly to a specified location.
- * @param loc The position to which the servo should move.
- */
-void Grabber::moveTo(int loc) {
-    if (pos == loc) {
-        return;
-    }
-    if (pos < loc) {
-        for (pos; pos < loc; pos++) {
-            servo.write(pos);
-            delay(5);
-        }
-    } else {
-        for (pos; pos > loc; pos--) {
-            servo.write(pos);
-            delay(5);
-        }
-    }
 }
 
 /**
@@ -62,6 +40,6 @@ void Grabber::run(float *pos, float *target) {
             fabs(pos[1] - target[1]) < posTolerance,
             fabs(pos[2] - target[2]) < posTolerance) {
         release();
-        logger.log("Grabber", "Released payload.");
+        logger->log(F("Grabber"), F("Released payload."));
     }
 }

@@ -4,6 +4,8 @@ project(Quadcopter-Testing)
 include_directories(Modules)
 include_directories(Modules/Logger)
 include_directories(Modules/Autopilot)
+include_directories(Modules/Grabber)
+include_directories(libraries/PetitFS)
 include_directories("C:/Users/Elijah/Documents/Arduino/libraries/SD-master")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")

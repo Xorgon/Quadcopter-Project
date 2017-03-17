@@ -14,18 +14,17 @@ class Grabber {
 public:
     Grabber();
 
-    Grabber(int servoPin, Logger logger);
+    Grabber(int servoPin, Logger *logger);
 
     void run(float pos[], float target[]);
 
 private:
-    int pos;
 
     // Positional tolerance in meters.
-    float posTolerance = 0.1;
+#define posTolerance 0.1
 
     Servo servo;
-    Logger logger;
+    Logger *logger;
 
     void moveTo(int loc);
 
