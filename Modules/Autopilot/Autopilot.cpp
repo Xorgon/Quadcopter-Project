@@ -17,10 +17,10 @@ Autopilot::Autopilot(Logger *logger) {
     lastErrY = 999;
     lastErrZ = 999;
 
-    pitchPWM.attach(5);
-    rollPWM.attach(6);
-    yawPWM.attach(7);
-    throttlePWM.attach(8);
+    pitchPWM.attach(PITCH_PWM_PIN);
+    rollPWM.attach(ROLL_PWM_PIN);
+    yawPWM.attach(YAW_PWM_PIN);
+    throttlePWM.attach(THROTTLE_PWM_PIN);
 
     attachInterrupt(0, onRising, RISING);
 
@@ -77,6 +77,13 @@ float *Autopilot::calculate(float *tar, float *loc) {
     if (throttle > maxThrottle) { throttle = maxThrottle; }
 
     return; // {pitch, roll, throttle}; TODO: Outputs.
+}
+
+void Autopilot::sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t throttle) {
+    pitchPWM.writeMicroseconds(pitch);
+    rollPWM.writeMicroseconds(roll);
+    yawPWM.writeMicroseconds(yaw);
+    throttlePWM.writeMicroseconds(throttle);
 }
 
 

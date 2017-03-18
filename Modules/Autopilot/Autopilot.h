@@ -25,6 +25,8 @@ public:
 
     float *calculate(float target[], float location[]);
 
+    void sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t throttle);
+
 private:
 
     bool lastActive;
@@ -54,12 +56,15 @@ private:
 #define ACTIVE_PWM_TOLERANCE 100
 #define ACTIVE_PIN 10
 
+#define PITCH_PWM_PIN
+#define ROLL_PWM_PIN
+#define YAW_PWM_PIN
+#define THROTTLE_PWM_PIN
+
     Servo pitchPWM;
     Servo yawPWM;
     Servo rollPWM;
     Servo throttlePWM;
-
-    void sendToController(float pitch, float roll, float yaw, float throttle);
 
     static void onRising();
 
