@@ -14,33 +14,55 @@ PetitSerial PS;
 
 FATFS fs;     /* File system object */
 //------------------------------------------------------------------------------
-void errorHalt(char* msg) {
-  Serial.print("Error: ");
-  Serial.println(msg);
-  while(1);
+void errorHalt(char *msg) {
+    Serial.print("Error: ");
+    Serial.println(msg);
+    while (1);
 }
+
 //------------------------------------------------------------------------------
-void test() {
-  uint8_t buf[32];
-  
-  // Initialize SD and file system.
-  if (pf_mount(&fs)) errorHalt("pf_mount");
-  
-  // Open test file.
-  if (pf_open("TEST.TXT")) errorHalt("pf_open");
-  
-  // Dump test file to Serial.
-  while (1) {
-    UINT nr;
-    if (pf_read(buf, sizeof(buf), &nr)) errorHalt("pf_read");
-    if (nr == 0) break;
-    Serial.write(buf, nr);
-  }
+void testRead() {
+    uint8_t buf[32];
+
+    // Initialize SD and file system.
+    if (pf_mount(&fs)) errorHalt("pf_mount");
+
+    // Open test file.
+    if (pf_open("TEST.TXT")) errorHalt("pf_open");
+
+    // Dump test file to Serial.
+    while (1) {
+        UINT nr;
+        if (pf_read(buf, sizeof(buf), &nr)) errorHalt("pf_read");
+        if (nr == 0) break;
+        Serial.write(buf, nr);
+    }
 }
+
 //------------------------------------------------------------------------------
+void testWrite() {
+    if (pf_mount(&fs)) errorHalt("pf_mount");
+
+    if (pf_open("TEST.TXT")) errorHalt("pf_open");
+
+    char buf[33] = "FARTPOOPFARTPOOPFARTPOOPFARTPOOP\n";
+
+//    while (1) {
+    for (int i = 0; i < 100; ++i) {
+        UINT bytesWritten;
+        if (pf_write(&buf, sizeof(buf), &bytesWritten)) errorHalt("pf_write");
+        Serial.println(bytesWritten);
+    }
+//        if (bytesWritten == 0) break;
+//    }
+
+}
+
 void setup() {
-  Serial.begin(9600);
-  test();
-  Serial.println("\nDone!");
+    Serial.begin(9600);
+    testWrite();
+//    testRead();
+    Serial.println("\nDone!");
 }
+
 void loop() {}
