@@ -5,6 +5,8 @@
 #include "PetitFS.h"
 #include "PetitSerial.h"
 
+uint32_t charsWritten;
+
 PetitSerial PS;
 // Use PetitSerial instead of Serial.
 #define Serial PS
@@ -45,21 +47,32 @@ void testWrite() {
 
     if (pf_open("TEST.TXT")) errorHalt("pf_open");
 
-    char buf[33] = "FARTPOOPFARTPOOPFARTPOOPFARTPOOP\n";
+    char buf[] = " First of double write test\n";
 
-//    while (1) {
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 10; ++i) {
+        buf[0] = i;
         UINT bytesWritten;
         if (pf_write(&buf, sizeof(buf), &bytesWritten)) errorHalt("pf_write");
+        charsWritten += bytesWritten;
         Serial.println(bytesWritten);
     }
-//        if (bytesWritten == 0) break;
-//    }
-
+    uint16_t fillChars = 1024 - charsWritten % 1024;
+    char fill[fillChars];
+    for (int j = 0; j < fillChars; ++j) {
+        if (j == fillChars - 1) {
+            fill[j] = "\n";
+        } else {
+            fill[j] = "#";
+        }
+    }
+    UINT bytesWritten;
+    if (pf_write(&fill, sizeof(fill), &bytesWritten)) errorHalt("fill write");
+    pf_lseek(fs.fptr + 1); // TODO: Test this for double write test.
 }
 
 void setup() {
     Serial.begin(9600);
+    charsWritten = 0;
     testWrite();
 //    testRead();
     Serial.println("\nDone!");
