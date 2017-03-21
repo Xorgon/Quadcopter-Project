@@ -43,14 +43,17 @@ void testRead() {
 
 //------------------------------------------------------------------------------
 void testWrite() {
-    if (pf_mount(&fs)) errorHalt("pf_mount");
+    while (pf_mount(&fs)) {
+        Serial.println("Error: pf_mount");
+    }
 
-    if (pf_open("TEST.TXT")) errorHalt("pf_open");
+    if (pf_open("RAW.QFL")) errorHalt("pf_open");
 
-    char buf[] = " First of double write test\n";
+    pf_lseek(2);
 
-    for (int i = 0; i < 10; ++i) {
-        buf[0] = i;
+    char buf[] = "Write test\n";
+
+    for (int i = 0; i < 1; ++i) {
         UINT bytesWritten;
         if (pf_write(&buf, sizeof(buf), &bytesWritten)) errorHalt("pf_write");
         charsWritten += bytesWritten;
@@ -60,14 +63,15 @@ void testWrite() {
     char fill[fillChars];
     for (int j = 0; j < fillChars; ++j) {
         if (j == fillChars - 1) {
-            fill[j] = "\n";
+            Serial.println("YUP");
+            fill[j] = "v";
         } else {
-            fill[j] = "#";
+            fill[j] = "X";
         }
     }
     UINT bytesWritten;
     if (pf_write(&fill, sizeof(fill), &bytesWritten)) errorHalt("fill write");
-    pf_lseek(fs.fptr + 1); // TODO: Test this for double write test.
+//    if (pf_lseek(fs.fptr + 1)) errorHalt("pf_lseek"); // TODO: Test this for double write test.
 }
 
 void setup() {
