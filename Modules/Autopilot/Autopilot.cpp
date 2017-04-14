@@ -116,11 +116,12 @@ uint16_t Autopilot::calculateThrottle(float errZ) {
 }
 
 // TODO: Ensure that correct values are read by Naze32.
+#define PWM_CORRECTION_NUMBER -2
 void Autopilot::sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t throttle) {
-    pitchPWM.writeMicroseconds(pitch);
-    rollPWM.writeMicroseconds(roll);
-    yawPWM.writeMicroseconds(yaw);
-    throttlePWM.writeMicroseconds(throttle);
+    pitchPWM.writeMicroseconds(pitch + PWM_CORRECTION_NUMBER);
+    rollPWM.writeMicroseconds(roll + PWM_CORRECTION_NUMBER);
+    yawPWM.writeMicroseconds(yaw + PWM_CORRECTION_NUMBER);
+    throttlePWM.writeMicroseconds(throttle + PWM_CORRECTION_NUMBER);
 }
 
 
