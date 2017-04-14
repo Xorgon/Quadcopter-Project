@@ -6,7 +6,7 @@
 
 Autopilot::Autopilot() {}
 
-Autopilot::Autopilot(Logger *logger) {
+Autopilot::Autopilot(LoggerLite *logger) {
     this->logger = logger;
 
     lastErrX = 999;
@@ -42,7 +42,7 @@ void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
         }
     }
 
-    if (autopilotActive) {
+    if (autopilotActive || activeOverride) {
         float err[3];
         err[0] = tar[0] - loc[0];
         err[1] = tar[1] - loc[1];
@@ -51,8 +51,8 @@ void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
         sendPWM(
                 calculatePitch(err[0]),
                 calculateRoll(err[1]),
-                calculateThrottle(err[2]),
-                calculateYaw(yawTar - yaw)
+                calculateYaw(yawTar - yaw),
+                calculateThrottle(err[2])
         );
     }
 }
@@ -63,9 +63,12 @@ uint16_t Autopilot::calculatePitch(float errX) {
     }
     float pdOut = KP_X * errX + KD_X * (errX - lastErrX);
 
-    uint16_t pwmOut = 1500 + roundf(pdOut) * PITCH_PD_PWM_FACTOR;
+    uint16_t pwmOut = 1500 + roundf(pdOut * PITCH_PD_PWM_FACTOR);
 
     lastErrX = errX;
+
+    if (int(pwmOut - 1500) > 0 && int(pwmOut - 1500) > MAX_PITCH) { pwmOut = 1500 + MAX_PITCH; }
+    if (int(pwmOut - 1500) < 0 && -(int(pwmOut - 1500)) > MAX_PITCH) { pwmOut = 1500 - MAX_PITCH; }
 
     return pwmOut;
 }
@@ -76,9 +79,12 @@ uint16_t Autopilot::calculateRoll(float errY) {
     }
     float pdOut = KP_Y * errY + KD_Y * (errY - lastErrY);
 
-    uint16_t pwmOut = 1500 + roundf(pdOut) * ROLL_PD_PWM_FACTOR;
+    uint16_t pwmOut = 1500 + roundf(pdOut * ROLL_PD_PWM_FACTOR);
 
     lastErrY = errY;
+
+    if (int(pwmOut - 1500) > 0 && int(pwmOut - 1500) > MAX_ROLL) { pwmOut = 1500 + MAX_ROLL; }
+    if (int(pwmOut - 1500) < 0 && -(int(pwmOut - 1500)) > MAX_ROLL) { pwmOut = 1500 - MAX_ROLL; }
 
     return pwmOut;
 }
@@ -90,33 +96,37 @@ uint16_t Autopilot::calculateYaw(float errYaw) {
     }
     yawIntegral += (now - lastYawTime) * errYaw;
 
-    float pdOut = KP_YAW * errYaw + KI_YAW * yawIntegral;
+    float pdOut = KP_YAW * errYaw + KI_YAW * yawIntegral / 1000;
 
-    uint16_t pwmOut = 1500 + roundf(pdOut) * YAW_PI_PWM_FACTOR;
+    uint16_t pwmOut = 1500 + roundf(pdOut * YAW_PI_PWM_FACTOR);
 
     lastYawTime = now;
 
     return pwmOut;
 }
 
+// TODO: Check throttle active range.
 uint16_t Autopilot::calculateThrottle(float errZ) {
     uint32_t now = millis();
     if (lastThrottleTime == 0) {
         lastThrottleTime = now;
     }
-    throttleIntegral += (now - lastThrottleTime) * errZ;
+    throttleIntegral += (now - lastThrottleTime) * errZ / 1000;
 
     float pdOut = KP_Z * errZ + KI_Z * throttleIntegral;
 
-    uint16_t pwmOut = 1500 + roundf(pdOut) * THROTTLE_PI_PWM_FACTOR;
+    uint16_t pwmOut = 1500 + roundf(pdOut * THROTTLE_PI_PWM_FACTOR);
 
     lastThrottleTime = now;
+
+    if (int(pwmOut - 1500) > 0 && int(pwmOut - 1500) > MAX_THROTTLE) { pwmOut = 1500 + MAX_THROTTLE; }
+    if (int(pwmOut - 1500) < 0 && -(int(pwmOut - 1500)) > MAX_THROTTLE) { pwmOut = 1500 - MAX_THROTTLE; }
 
     return pwmOut;
 }
 
-// TODO: Ensure that correct values are read by Naze32.
 #define PWM_CORRECTION_NUMBER -2
+
 void Autopilot::sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t throttle) {
     pitchPWM.writeMicroseconds(pitch + PWM_CORRECTION_NUMBER);
     rollPWM.writeMicroseconds(roll + PWM_CORRECTION_NUMBER);

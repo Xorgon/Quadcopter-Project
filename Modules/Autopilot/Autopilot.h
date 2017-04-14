@@ -6,7 +6,7 @@
 #define QUADCOPTER_TESTING_AUTOPILOT_H
 
 #include <Arduino.h>
-#include <Logger.h>
+#include <LoggerLite.h>
 #include <math.h>
 #include "Servo.h"
 
@@ -19,7 +19,7 @@ class Autopilot {
 public:
     Autopilot();
 
-    Autopilot(Logger *logger);
+    Autopilot(LoggerLite *logger);
 
     void run(float tar[], float loc[], float yawTar, float yaw);
 
@@ -30,13 +30,15 @@ public:
 
     void sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t throttle);
 
+    bool activeOverride = false;
+
 private:
 
     bool lastActive;
 
-#define maxPitch 30
-#define maxRoll 30
-#define maxThrottle 100
+#define MAX_PITCH 500
+#define MAX_ROLL 500
+#define MAX_THROTTLE 500
 
 #define KP_X 0.1
 #define KP_Y 0.1
@@ -49,10 +51,10 @@ private:
 #define KI_Z 0.3
 #define KI_YAW 0.3
 
-#define ROLL_PD_PWM_FACTOR 300
-#define PITCH_PD_PWM_FACTOR 300
-#define YAW_PI_PWM_FACTOR 300
-#define THROTTLE_PI_PWM_FACTOR 300
+#define ROLL_PD_PWM_FACTOR 1000
+#define PITCH_PD_PWM_FACTOR 1000
+#define YAW_PI_PWM_FACTOR 1000
+#define THROTTLE_PI_PWM_FACTOR 1000
 
     float lastErrX;
     float lastErrY;
@@ -63,7 +65,7 @@ private:
     float yawIntegral;
     float throttleIntegral;
 
-    Logger *logger;
+    LoggerLite *logger;
 
 #define AUTOPILOT_LOGGER_TAG "Autopilot"
 
