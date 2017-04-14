@@ -12,9 +12,12 @@ void setup() {
     logger = Logger(10);
     autopilot = Autopilot(&logger);
 
-    autopilot.sendPWM(1750, 1650, 1450, 1200);
+    autopilot.sendPWM(900, 1000, 1100, 1200);
 }
 
 void loop() {
-
+    autopilot.sendPWM(900, 1000, 1100, 1200);
+    delay(1000);
+    autopilot.sendPWM(1500, 1500, 1500, 1500);
+    delay(1000);
 }
