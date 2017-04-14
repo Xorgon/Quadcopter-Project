@@ -21,7 +21,7 @@ public:
 
     Autopilot(Logger *logger);
 
-    void run();
+    void run(float tar[], float loc[], float yawTar, float yaw);
 
     uint16_t calculatePitch(float errX); // PD
     uint16_t calculateRoll(float errY); // PD
@@ -67,7 +67,6 @@ private:
 
 #define AUTOPILOT_LOGGER_TAG "Autopilot"
 
-// TODO: Test with transmitter/receiver setup.
 #define ACTIVE_PWM 1900
 #define ACTIVE_PWM_TOLERANCE 100
 #define ACTIVE_PIN 10

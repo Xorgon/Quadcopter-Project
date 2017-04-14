@@ -2,9 +2,6 @@
 // Created by Elijah on 16/02/2017.
 //
 
-// TODO: Yaw PI controller.
-// TODO: Change to output a proportional PWM rather than angles.
-
 #include "Autopilot.h"
 
 Autopilot::Autopilot() {}
@@ -35,7 +32,7 @@ Autopilot::Autopilot(Logger *logger) {
     digitalWrite(ACTIVE_PIN, LOW);
 }
 
-void Autopilot::run() {
+void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
     if (lastActive != autopilotActive) {
         lastActive = autopilotActive;
         if (autopilotActive) {
@@ -43,6 +40,20 @@ void Autopilot::run() {
         } else {
             logger->log(AUTOPILOT_LOGGER_TAG, "Autopilot deactivated.");
         }
+    }
+
+    if (autopilotActive) {
+        float err[3];
+        err[0] = tar[0] - loc[0];
+        err[1] = tar[1] - loc[1];
+        err[2] = tar[2] - loc[2];
+
+        sendPWM(
+                calculatePitch(err[0]),
+                calculateRoll(err[1]),
+                calculateThrottle(err[2]),
+                calculateYaw(yawTar - yaw)
+        );
     }
 }
 
