@@ -4,7 +4,6 @@
 
 // TODO: Yaw PI controller.
 // TODO: Change to output a proportional PWM rather than angles.
-// TODO: Change throttle to use read pitch, roll, rather than using the intended.
 
 #include "Autopilot.h"
 
@@ -15,7 +14,12 @@ Autopilot::Autopilot(Logger *logger) {
 
     lastErrX = 999;
     lastErrY = 999;
-    lastErrZ = 999;
+
+    yawIntegral = 0;
+    throttleIntegral = 0;
+
+    lastYawTime = 0;
+    lastThrottleTime = 0;
 
     pitchPWM.attach(PITCH_PWM_PIN);
     rollPWM.attach(ROLL_PWM_PIN);
@@ -42,43 +46,65 @@ void Autopilot::run() {
     }
 }
 
-float *Autopilot::calculate(float *tar, float *loc) {
-    float errX = tar[0] - loc[0];
-    float errY = tar[1] - loc[1];
-    float errZ = tar[2] - loc[2];
-
-    // Check if there has been no previous value of error, 999 is arbitrary value set at initialization.
+uint16_t Autopilot::calculatePitch(float errX) {
     if (lastErrX == 999) {
         lastErrX = errX;
     }
+    float pdOut = KP_X * errX + KD_X * (errX - lastErrX);
+
+    uint16_t pwmOut = 1500 + roundf(pdOut) * PITCH_PD_PWM_FACTOR;
+
+    lastErrX = errX;
+
+    return pwmOut;
+}
+
+uint16_t Autopilot::calculateRoll(float errY) {
     if (lastErrY == 999) {
         lastErrY = errY;
     }
-    if (lastErrZ == 999) {
-        lastErrZ = errZ;
-    }
+    float pdOut = KP_Y * errY + KD_Y * (errY - lastErrY);
 
-    //TODO: Correctly define the coordinate system in relation to the aircraft.
-    float pdOutX = KP_X * errX + KD_X * (errX - lastErrX);
-    float pdOutY = KP_Y * errY + KD_Y * (errY - lastErrY);
-    float pdOutZ = KP_Z * errZ + KD_Z * (errZ - lastErrZ);
+    uint16_t pwmOut = 1500 + roundf(pdOut) * ROLL_PD_PWM_FACTOR;
 
-    // Sideways acceleration will be proportional to the sin of the pitch/roll angle.
-    // pdOut gives the acceleration, so asin is used to make the angle correctly proportional.
-    float pitch = 1500 + asin(pdOutX); //TODO: Make a proportionality factor to give correct degrees.
-    float roll = 1500 + asin(pdOutY);
+    lastErrY = errY;
 
-    if (pitch > maxPitch) { pitch = maxPitch; }
-    if (roll > maxRoll) { roll = maxRoll; }
-
-    // Throttle is proportional to lift/(cos(pitch)*cos(roll)).
-    float throttle = pdOutZ / (cos(pitch) * cos(roll)); //TODO: Make a proportionality factor.
-
-    if (throttle > maxThrottle) { throttle = maxThrottle; }
-
-    return; // {pitch, roll, throttle}; TODO: Outputs.
+    return pwmOut;
 }
 
+uint16_t Autopilot::calculateYaw(float errYaw) {
+    uint32_t now = millis();
+    if (lastYawTime == 0) {
+        lastYawTime = now;
+    }
+    yawIntegral += (now - lastYawTime) * errYaw;
+
+    float pdOut = KP_YAW * errYaw + KI_YAW * yawIntegral;
+
+    uint16_t pwmOut = 1500 + roundf(pdOut) * YAW_PI_PWM_FACTOR;
+
+    lastYawTime = now;
+
+    return pwmOut;
+}
+
+uint16_t Autopilot::calculateThrottle(float errZ) {
+    uint32_t now = millis();
+    if (lastThrottleTime == 0) {
+        lastThrottleTime = now;
+    }
+    throttleIntegral += (now - lastThrottleTime) * errZ;
+
+    float pdOut = KP_Z * errZ + KI_Z * throttleIntegral;
+
+    uint16_t pwmOut = 1500 + roundf(pdOut) * THROTTLE_PI_PWM_FACTOR;
+
+    lastThrottleTime = now;
+
+    return pwmOut;
+}
+
+// TODO: Ensure that correct values are read by Naze32.
 void Autopilot::sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t throttle) {
     pitchPWM.writeMicroseconds(pitch);
     rollPWM.writeMicroseconds(roll);
@@ -87,7 +113,6 @@ void Autopilot::sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t th
 }
 
 
-//TODO: Fix these interrupt call functions so that they actually work.
 static void Autopilot::onRising() {
     attachInterrupt(0, onFalling, FALLING);
     lastPWMTime = micros();
