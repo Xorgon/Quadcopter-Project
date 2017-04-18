@@ -7,7 +7,7 @@ include_directories(Modules/LoggerLite)
 include_directories(Modules/Autopilot)
 include_directories(Modules/Grabber)
 include_directories(libraries/PetitFS/src)
-include_directories("C:/Users/Elijah/Documents/Arduino/libraries/SD-master")
+include_directories(libraries/SD/src)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 

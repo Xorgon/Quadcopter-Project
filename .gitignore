@@ -86,3 +86,6 @@ fabric.properties
 
 # CMake
 cmake-build-debug/*
+
+# Arduino libraries to be excluded
+libraries/SD/*
