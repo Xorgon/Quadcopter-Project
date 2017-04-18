@@ -33,6 +33,8 @@ private:
 
     File logFile;
 
+    uint16_t bytesWritten;
+
     String getNextName();
 
 };

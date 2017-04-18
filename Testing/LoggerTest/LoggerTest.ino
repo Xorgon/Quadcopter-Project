@@ -22,5 +22,6 @@ void loop() {
     logger.log("Farm", "7 Goats");
     logger.log("Farm", "8 Turkeys");
     logger.log("Farm", "9 Horses");
-    logger.logFile.flush();
 }
+
+// TODO: Test this sketch with the new Logger code.

@@ -9,6 +9,7 @@
  * @param sdChipSelect The SD chipSelect value, 10 for an UNO.
  */
 Logger::Logger(int sdChipSelect) {
+    bytesWritten = 0;
     SD.begin(sdChipSelect);
     String logName = getNextName();
     Serial.println("Logging to: " + logName + ".QFL");
@@ -22,14 +23,19 @@ Logger::Logger(int sdChipSelect) {
 Logger::Logger() {};
 
 /**
- * Prepares data for logging and writes to an SD card and Serial monitor when buffer is full.
+ * Prepares data for logging and writes to an SD card when buffer is full.
  * @param tag The name of the module calling the function.
  * @param data The data to be logged.
  */
- // TODO: Make log() automatically flush when the buffer is full.
 void Logger::log(String tag, String data) {
     String logLine = "[" + parseMillis(millis()) + "][" + tag + "] " + data + "\n";
-    Serial.print(logLine);
+    if (bytesWritten + logLine.length() > 512) {
+        logFile.flush();
+        bytesWritten = 0;
+    }
+    logFile.print(logLine);
+    bytesWritten += logLine.length();
+}
     logFile.print(logLine);
 }
 
