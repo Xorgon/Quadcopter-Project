@@ -27,6 +27,8 @@ public:
 
     void log(String tag, String data);
 
+    void log(String logLine);
+
     String parseMillis(uint32_t millis);
 
 private:

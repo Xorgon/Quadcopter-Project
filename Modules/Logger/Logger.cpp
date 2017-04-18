@@ -36,7 +36,18 @@ void Logger::log(String tag, String data) {
     logFile.print(logLine);
     bytesWritten += logLine.length();
 }
+
+/**
+ * Writes to an SD card when buffer is full.
+ * @param logLine The string to be written.
+ */
+void Logger::log(String logLine) {
+    if (bytesWritten + logLine.length() > 512) {
+        logFile.flush();
+        bytesWritten = 0;
+    }
     logFile.print(logLine);
+    bytesWritten += logLine.length();
 }
 
 /**
