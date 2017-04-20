@@ -29,6 +29,10 @@ public:
 
     void log(String logLine);
 
+    void checkFlush(uint16_t logLineLength);
+
+    void checkFlush();
+
     String parseMillis(uint32_t millis);
 
 private:
@@ -36,6 +40,8 @@ private:
     File logFile;
 
     uint16_t bytesWritten;
+
+    uint32_t lastFlushed;
 
     String getNextName();
 

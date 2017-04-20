@@ -10,6 +10,7 @@
  */
 Logger::Logger(int sdChipSelect) {
     bytesWritten = 0;
+    lastFlushed = 0;
     SD.begin(sdChipSelect);
     String logName = getNextName();
     Serial.println("Logging to: " + logName + ".QFL");
@@ -29,10 +30,7 @@ Logger::Logger() {};
  */
 void Logger::log(String tag, String data) {
     String logLine = "[" + parseMillis(millis()) + "][" + tag + "] " + data + "\n";
-    if (bytesWritten + logLine.length() > 512) {
-        logFile.flush();
-        bytesWritten = 0;
-    }
+    checkFlush(logLine.length());
     logFile.print(logLine);
     bytesWritten += logLine.length();
 }
@@ -42,12 +40,28 @@ void Logger::log(String tag, String data) {
  * @param logLine The string to be written.
  */
 void Logger::log(String logLine) {
-    if (bytesWritten + logLine.length() > 512) {
-        logFile.flush();
-        bytesWritten = 0;
-    }
+    checkFlush(logLine.length());
     logFile.print(logLine);
     bytesWritten += logLine.length();
+}
+
+/**
+ * Checks if the SD buffer needs to be flushed, and flushes it.
+ */
+void Logger::checkFlush(uint16_t logLineLength){
+    if (bytesWritten + logLineLength > 512 || millis() - lastFlushed > 3000) {
+        logFile.flush();
+        bytesWritten = 0;
+        lastFlushed = millis();
+    }
+}
+
+void Logger::checkFlush(){
+    if (millis() - lastFlushed > 3000) {
+        logFile.flush();
+        bytesWritten = 0;
+        lastFlushed = millis();
+    }
 }
 
 /**

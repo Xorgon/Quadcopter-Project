@@ -13,12 +13,13 @@ void setup() {
 }
 
 void loop() {
-    String toWrite = "";
-    while(Serial.available()) {
-        toWrite.concat(Serial.read());
+    if (Serial.available()) {
+        String toWrite = "";
+        while (Serial.available()) {
+            toWrite.concat(char(Serial.read()));
+        }
+        logger.log(toWrite);
+        Serial.print("/"); // To acknowledge receipt.
     }
-    logger.log(toWrite);
-    Serial.print("/"); // To acknowledge receipt.
+    logger.checkFlush();
 }
-
-// TODO: Test this sketch.
