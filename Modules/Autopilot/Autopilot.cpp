@@ -6,7 +6,7 @@
 
 Autopilot::Autopilot() {}
 
-Autopilot::Autopilot(LoggerLite *logger) {
+Autopilot::Autopilot(SerialLogger *logger) {
     this->logger = logger;
 
     lastErrX = 999;

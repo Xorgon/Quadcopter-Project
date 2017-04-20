@@ -6,9 +6,9 @@
 #define QUADCOPTER_TESTING_AUTOPILOT_H
 
 #include <Arduino.h>
-#include <LoggerLite.h>
 #include <math.h>
-#include "Servo.h"
+#include <Servo.h>
+#include "SerialLogger.h"
 
 // These variables must be created in the main control file.
 extern volatile unsigned long lastPWMTime;
@@ -19,7 +19,7 @@ class Autopilot {
 public:
     Autopilot();
 
-    Autopilot(LoggerLite *logger);
+    Autopilot(SerialLogger *logger);
 
     void run(float tar[], float loc[], float yawTar, float yaw);
 
@@ -65,7 +65,7 @@ private:
     float yawIntegral;
     float throttleIntegral;
 
-    LoggerLite *logger;
+    SerialLogger *logger;
 
 #define AUTOPILOT_LOGGER_TAG "Autopilot"
 
