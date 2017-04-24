@@ -4,9 +4,8 @@
 
 
 
-#include <iostream>
-#include <cmath>
-#include <Arduino.h>
+#include <stdio.h>
+
 #include "infrared.h"
 #include <math.h>
 
@@ -15,10 +14,10 @@
 using namespace std;
 
 infrared::infrared() {
-	cout << "starting. . .";
+	Serial.println("starting. . .");
 }
 
-void Calculate() {
+void infrared::Calculate() {
 
 
 	int mean[3] = { 0 }; 
@@ -53,6 +52,6 @@ void Calculate() {
 
 
 
-~infrared::infrared() {
-	cout << "ending. . .";
+infrared::~infrared() {
+	Serial.println("ending. . .");
 }
