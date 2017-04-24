@@ -18,6 +18,8 @@ public:
 
     void run(float pos[], float target[]);
 
+    void release();
+
 private:
 
     // Positional tolerance in meters.
@@ -27,8 +29,6 @@ private:
     SerialLogger *logger;
 
     void moveTo(int loc);
-
-    void release();
 };
 
 #endif //SKETCH_DISPENSE_H

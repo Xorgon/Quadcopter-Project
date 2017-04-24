@@ -25,9 +25,9 @@ Grabber::Grabber(int servoPin, SerialLogger *logger) {
  * Releases the grabber.
  */
 void Grabber::release() {
-    moveTo(90);
+    servo.write(90);
     delay(50);
-    moveTo(0);
+    servo.write(0);
 }
 
 /**
