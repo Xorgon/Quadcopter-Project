@@ -8,13 +8,13 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include "math.h"
-#include "Logger.h"
+#include "SerialLogger.h"
 
 class Grabber {
 public:
     Grabber();
 
-    Grabber(int servoPin, Logger *logger);
+    Grabber(int servoPin, SerialLogger *logger);
 
     void run(float pos[], float target[]);
 
@@ -24,7 +24,7 @@ private:
 #define posTolerance 0.1
 
     Servo servo;
-    Logger *logger;
+    SerialLogger *logger;
 
     void moveTo(int loc);
 

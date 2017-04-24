@@ -14,7 +14,7 @@ Grabber::Grabber() {}
  * @param servoPin The pin to which the servo is connected.
  * @param logger The logger being used.
  */
-Grabber::Grabber(int servoPin, Logger *logger) {
+Grabber::Grabber(int servoPin, SerialLogger *logger) {
     servo = Servo();
     servo.attach(servoPin);
     servo.write(0);
