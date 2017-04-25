@@ -26,6 +26,11 @@ float Instruments::setPos(float *pos) {
     float attitude[3];
     getAttitude(attitude);
 
+    String logData = "Roll= " + String(attitude[0])
+                     + ", Pitch= " + String(attitude[1])
+                     + ", Yaw= " + String(attitude[2]);
+    logger->log("Instruments", logData);
+
     sensors.setAngle(attitude[1], attitude[0], attitude[2]);
     sensors.Calculate();
 
@@ -33,6 +38,9 @@ float Instruments::setPos(float *pos) {
     pos[1] = sensors.GetDistanceY();
     pos[2] = sensors.GetDistanceZ();
     // TODO: Check that these are in the correct reference frame.
+
+    logData = "x= " + String(pos[0]) + ", y= " + String(pos[1]) + ", z= " + String(pos[2]);
+    logger->log("Instruments", logData);
 
     return attitude[2];
 }
