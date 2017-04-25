@@ -19,7 +19,7 @@ infrared::infrared() {
 
 void infrared::Calculate() {
 
-
+    // TODO: Test this filter method and add a better filter if necessary (which it probably is).
 	int mean[3] = { 0 }; 
 	long sensorsum[3] = { 0 };
 	float sensorValue[3] = { 0 };
@@ -65,7 +65,7 @@ void infrared::Calculate() {
 
 
 
-
+    // TODO: Individual sensor calibration.
 	for (int j = 0; j < 3; j++) {															// To relate the sensor analogue value to distance
 		sensorValue[j] = 28000 * pow(mean[j], -1.58);										// another set of calculation could be given by
         //Serial.print(j);
