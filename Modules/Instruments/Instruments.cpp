@@ -8,18 +8,23 @@ Instruments::Instruments() {}
 
 Instruments::Instruments(SerialLogger *logger, uint8_t softSerialRX, uint8_t softSerialTX) {
     this->logger = logger;
-    SoftwareSerial mspSerial(softSerialRX, softSerialTX);
+    mspSerial = new SoftwareSerial(softSerialRX, softSerialTX);
     sensors = infrared();
 }
 
-void Instruments::setPos(float *pos) {
+/**
+ * Sets the correct values for the position in the provided array.
+ * @param pos Position array.
+ * @return yaw float.
+ */
+float Instruments::setPos(float *pos) {
 
     // Send MSP Request:
-    uint8_t datad = 0;
-    uint8_t *data = &datad;
-    sendMSPRequest(MSP_ATTITUDE, data, 0);
-    while (!mspSerial.available()) {}
-    float attitude[] = getAttitude();
+    uint8_t data = 0;
+    sendMSPRequest(MSP_ATTITUDE, &data, 0);
+    while (!mspSerial->available()) {}
+    float attitude[3];
+    getAttitude(attitude);
 
     sensors.setAngle(attitude[1], attitude[0], attitude[2]);
     sensors.Calculate();
@@ -28,6 +33,8 @@ void Instruments::setPos(float *pos) {
     pos[1] = sensors.GetDistanceY();
     pos[2] = sensors.GetDistanceZ();
     // TODO: Check that these are in the correct reference frame.
+
+    return attitude[2];
 }
 
 /**
@@ -41,14 +48,14 @@ void Instruments::sendMSPRequest(uint8_t cmd, uint8_t *data, uint8_t n_bytes) {
 
     uint8_t checksum = 0;
 
-    mspSerial.write((byte *) "$M<", 3);
-    mspSerial.write(n_bytes);
+    mspSerial->write((byte *) "$M<", 3);
+    mspSerial->write(n_bytes);
     checksum ^= n_bytes;
 
-    mspSerial.write(cmd);
+    mspSerial->write(cmd);
     checksum ^= cmd;
 
-    mspSerial.write(checksum);
+    mspSerial->write(checksum);
 }
 
 /**
@@ -56,16 +63,16 @@ void Instruments::sendMSPRequest(uint8_t cmd, uint8_t *data, uint8_t n_bytes) {
  *
  * @return Arrray of roll, pitch, yaw
  */
-float *Instruments::getAttitude() {
+void Instruments::getAttitude(float *attitude) {
     byte count = 0;
 
     int16_t roll;
     int16_t pitch;
     int16_t yaw;
 
-    while (mspSerial.available()) {
+    while (mspSerial->available()) {
         count += 1;
-        byte c = mspSerial.read();
+        byte c = mspSerial->read();
         switch (count) {
             case 6:
                 roll = c;
@@ -94,5 +101,7 @@ float *Instruments::getAttitude() {
         }
     }
 
-    return {roll / 10.0, pitch / 10.0, yaw};
+    attitude[0] = roll/10.0;
+    attitude[1] = pitch/10.0;
+    attitude[2] = yaw;
 }

@@ -20,13 +20,14 @@ public:
 
     Instruments(SerialLogger *logger, uint8_t softSerialRX, uint8_t softSerialTX);
 
-    void setPos(float pos[]);
+    float setPos(float pos[]);
 
 private:
     SerialLogger *logger;
     infrared sensors;
+    SoftwareSerial *mspSerial;
 
-    void sendMSPRequest();
+    void sendMSPRequest(uint8_t cmd, uint8_t *data, uint8_t n_bytes);
 
-    float *getAttitude();
+    void getAttitude(float attitude[]);
 };
