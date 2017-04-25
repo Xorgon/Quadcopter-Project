@@ -4,9 +4,10 @@
 
 #include "SerialLogger.h"
 
-SerialLogger::Logger() {
+SerialLogger::SerialLogger() {
+    Serial.begin(9600);
     log(F("Logger"), F("Started."));
-};
+}
 
 /**
  * Prepares data for logging and sends it through serial communications.

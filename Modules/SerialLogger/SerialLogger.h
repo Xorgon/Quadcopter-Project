@@ -16,7 +16,7 @@
  */
 class SerialLogger {
 public:
-    Logger();
+    SerialLogger();
 
     void log(String tag, String data);
 
