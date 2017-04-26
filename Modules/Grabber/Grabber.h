@@ -10,6 +10,8 @@
 #include "math.h"
 #include "SerialLogger.h"
 
+#define SERVO_OFFSET 4
+
 class Grabber {
 public:
     Grabber();

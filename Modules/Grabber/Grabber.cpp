@@ -17,7 +17,7 @@ Grabber::Grabber() {}
 Grabber::Grabber(int servoPin, SerialLogger *logger) {
     servo = Servo();
     servo.attach(servoPin);
-    servo.write(0);
+    servo.write(0 + SERVO_OFFSET);
     this->logger = logger;
 }
 
@@ -25,9 +25,9 @@ Grabber::Grabber(int servoPin, SerialLogger *logger) {
  * Releases the grabber.
  */
 void Grabber::release() {
-    servo.write(90);
-    delay(50);
-    servo.write(0);
+    servo.write(140 + SERVO_OFFSET);
+    delay(2000); // TODO: Make this be a scheduled event rather than a delay.
+    servo.write(0 + SERVO_OFFSET);
 }
 
 /**
