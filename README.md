@@ -33,3 +33,27 @@ To output control PWM values it uses Servo objects for easy PWM output. Each con
 `throttle: 8`
 
 The Autopilot receives its activation signal on digital pin 2. The active signal is 1900 microseconds +/- 100.
+
+# Arduino Pin Connections
+| Pin | Connection |
+| --- | ---------- |
+| D0 | SerialLogger RX |
+| D1 | SerialLogger TX |
+| D2 | Autopilot Activation Input |
+| D3 | MSP SoftSerial RX |
+| D4 | MSP SoftSerial TX |
+| D5 | Pitch Servo Output |
+| D6 | Roll Servo Output |
+| D7 | Yaw Servo Output |
+| D8 | Throttle Servo Output |
+| D9 | Grabber Servo Output |
+| D10 | Autopilot Activation Relay Output |
+| D11 | SerialLogger Writing LED |
+| D12 | Autopilot Active LED |
+| D13 | General Loop Running LED |
+| A0 | X-Axis IR Input |
+| A1 | Y-Axis IR Input |
+| A2 | Z-Axis IR Input |
+| A3 | |
+| A4 | |
+| A5 | |
