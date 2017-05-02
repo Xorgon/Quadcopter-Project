@@ -18,6 +18,8 @@ class SerialLogger {
 public:
     SerialLogger();
 
+    SerialLogger(uint8_t ledPin);
+
     void log(String tag, String data);
 
     void log(String logLine);
@@ -25,6 +27,7 @@ public:
     String parseMillis(uint32_t millis);
 
 private:
+    uint8_t ledPin;
 };
 
 #endif //QUADCOPTER_PROJECT_LOGGER_H

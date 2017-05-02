@@ -20,12 +20,15 @@ volatile uint16_t pwmValue;
 volatile bool autopilotActive;
 
 void setup() {
-    logger = SerialLogger();
-    autopilot = Autopilot(&logger);
-    grabber = Grabber(999, &logger); //TODO: Set correct servo pin.
-    instruments = Instruments(&logger, 3, 4); //TODO: Set correct softSerial pins.
+    pinMode(12, OUTPUT);
+    pinMode(13, OUTPUT);
 
-    //TODO: Set these correctly.
+    logger = SerialLogger(11);
+    autopilot = Autopilot(&logger);
+    grabber = Grabber(9, &logger);
+    instruments = Instruments(&logger, 3, 4);
+
+    //TODO: Set target correctly.
     tar[0] = 1.0;
     tar[1] = 1.0;
     tar[2] = 1.0;
@@ -39,7 +42,17 @@ void setup() {
 }
 
 void loop() {
+    // General loop running LED.
+    digitalWrite(13, HIGH);
+
     yaw = instruments.setPos(pos);
     autopilot.run(tar, pos, yawTar, yaw);
     grabber.run(pos, tar);
+
+    digitalWrite(13, LOW);
+
+    if (autopilotActive) {
+        digitalWrite(12, HIGH);
+    }
+
 }

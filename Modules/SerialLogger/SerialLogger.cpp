@@ -9,6 +9,13 @@ SerialLogger::SerialLogger() {
     log(F("Logger"), F("Started."));
 }
 
+SerialLogger::SerialLogger(uint8_t ledPin) {
+    Serial.begin(9600);
+    log(F("Logger"), F("Started."));
+    this->ledPin = ledPin;
+    pinMode(ledPin, OUTPUT);
+}
+
 /**
  * Prepares data for logging and sends it through serial communications.
  * @param tag The name of the module calling the function.
@@ -17,6 +24,15 @@ SerialLogger::SerialLogger() {
 void SerialLogger::log(String tag, String data) {
     String logLine = "[" + parseMillis(millis()) + "][" + tag + "] " + data + "\n";
     Serial.print(logLine);
+
+    digitalWrite(ledPin, HIGH);
+
+    while (!Serial.available());
+    while (Serial.available()) {
+        Serial.read();
+    }
+
+    digitalWrite(ledPin, LOW);
 }
 
 /**
@@ -25,6 +41,15 @@ void SerialLogger::log(String tag, String data) {
  */
 void SerialLogger::log(String logLine) {
     Serial.print(logLine);
+
+    digitalWrite(ledPin, HIGH);
+
+    while (!Serial.available());
+    while (Serial.available()) {
+        Serial.read();
+    }
+
+    digitalWrite(ledPin, LOW);
 }
 
 /**
