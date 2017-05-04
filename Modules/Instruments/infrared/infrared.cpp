@@ -20,6 +20,7 @@ infrared::infrared() {
 void infrared::Calculate() {
 
     // TODO: Test this filter method and add a better filter if necessary (which it probably is).
+	// change condition
 	int mean[3] = { 0 }; 
 	long sensorsum[3] = { 0 };
 	float sensorValue[3] = { 0 };
@@ -36,7 +37,7 @@ void infrared::Calculate() {
             //Serial.println(mean[0]);
             
 
-        }while(abs(sensorValue[0] - mean[0]) / mean[0] > 10);
+        }while(abs(sensorValue[0] - mean[0]) / mean[0] > 0.01);
 
 
         do{
@@ -47,7 +48,7 @@ void infrared::Calculate() {
             mean[1] = sensorsum[1]/3;
             sensorsum[1] = 0;        //clear and run
 
-        }while(abs(sensorValue[1] - mean[1]) / mean[1] > 10);
+        }while(abs(sensorValue[1] - mean[1]) / mean[1] > 0.01);
 
 
         do{
@@ -59,7 +60,7 @@ void infrared::Calculate() {
             sensorsum[2] = 0;        //clear and run
             
 
-        }while(abs(sensorValue[2] - mean[2]) / mean[2] > 10);
+        }while(abs(sensorValue[2] - mean[2]) / mean[2] > 0.01);
 
 
 
