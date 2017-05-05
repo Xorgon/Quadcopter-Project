@@ -22,45 +22,69 @@ void infrared::Calculate() {
     // TODO: Test this filter method and add a better filter if necessary (which it probably is).
     // change condition
     int mean[3] = {0};
-    long sensorsum[3] = {0};
+    long sensorsum = 0;
     float sensorValue[3] = {0};
+    float sensorInput[5]={0};
+    float max;
+    float min;
 
 
     do {
-        for (int n = 0; n < 3; n++) {
-            sensorValue[0] = analogRead(A0);   //Body Frame x direction infrared sensor
-            sensorsum[0] = sensorsum[0] + sensorValue[0];
+        max=0.0;
+        min=10000.0;
+        
+        for (int n = 0; n < 5; n++) {sensorInput[n] = analogRead(A0);}   //Body Frame x direction infrared sensor
+        
+        for(int n=0; n<5;n++){
+        if(sensorInput[n]>max) max=sensorInput[n];
+        if(sensorInput[n]<min) min=sensorInput[n];
+           sensorsum = sensorsum + sensorInput[n];
         }
-        mean[0] = sensorsum[0] / 3;
-        sensorsum[0] = 0;        //clear and run
+        
+        
+        mean[0] = (sensorsum-max-min) / 3;
+        sensorsum = 0;        //clear and run
         //Serial.print("mean x:");  //debug
         //Serial.println(mean[0]);
 
 
-    } while (abs(sensorValue[0] - mean[0]) / mean[0] > 0.005);
+    } while (abs(analogRead(A0) - mean[0]) / mean[0] > 0.005);
 
 
     do {
-        for (int n = 0; n < 3; n++) {
-            sensorValue[1] = analogRead(A1);   //Body Frame y direction infrared sensor
-            sensorsum[1] = sensorsum[1] + sensorValue[1];
+        max=0.0;
+        min=10000.0;
+        
+        for (int n = 0; n < 5; n++) { sensorInput[n] = analogRead(A1);}   //Body Frame y direction infrared sensor
+        
+        for(int n=0; n<5;n++){
+        if(sensorInput[n]>max) max=sensorInput[n];
+        if(sensorInput[n]<min) min=sensorInput[n];
+           sensorsum = sensorsum + sensorInput[n];
         }
-        mean[1] = sensorsum[1] / 3;
-        sensorsum[1] = 0;        //clear and run
+        
+        mean[1] = (sensorsum-max-min) / 3;
+        sensorsum = 0;        //clear and run
 
-    } while (abs(sensorValue[1] - mean[1]) / mean[1] > 0.005);
+    } while (abs(analogRead(A0) - mean[1]) / mean[1] > 0.005);
 
 
     do {
-        for (int n = 0; n < 3; n++) {
-            sensorValue[2] = analogRead(A2);   //Body Frame z direction infrared sensor
-            sensorsum[2] = sensorsum[2] + sensorValue[2];
+        max=0.0;
+        min=10000.0;
+        for (int n = 0; n < 5; n++) { sensorInput[n] = analogRead(A2);}  //Body Frame z direction infrared sensor
+        
+        for(int n=0; n<5;n++){
+        if(sensorInput[n]>max) max=sensorInput[n];
+        if(sensorInput[n]<min) min=sensorInput[n];
+           sensorsum = sensorsum + sensorInput[n];
         }
-        mean[2] = sensorsum[2] / 3;
-        sensorsum[2] = 0;        //clear and run
+        
+        mean[2] = (sensorsum-max-min) / 3;
+        sensorsum = 0;        //clear and run
 
 
-    } while (abs(sensorValue[2] - mean[2]) / mean[2] > 0.005);
+    } while (abs(analogRead(A0) - mean[2]) / mean[2] > 0.005);
 
 
 
