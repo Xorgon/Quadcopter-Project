@@ -22,7 +22,7 @@ void infrared::Calculate() {
     // TODO: Test this filter method and add a better filter if necessary (which it probably is).
     // change condition
     int mean[3] = {0};
-    long sensorsum = 0;
+    float sensorsum = 0;
     float sensorValue[3] = {0};
     float sensorInput[5]={0};
     float max;
@@ -66,7 +66,7 @@ void infrared::Calculate() {
         mean[1] = (sensorsum-max-min) / 3;
         sensorsum = 0;        //clear and run
 
-    } while (abs(analogRead(A0) - mean[1]) / mean[1] > 0.005);
+    } while (abs(analogRead(A1) - mean[1]) / mean[1] > 0.005);
 
 
     do {
@@ -84,7 +84,7 @@ void infrared::Calculate() {
         sensorsum = 0;        //clear and run
 
 
-    } while (abs(analogRead(A0) - mean[2]) / mean[2] > 0.005);
+    } while (abs(analogRead(A2) - mean[2]) / mean[2] > 0.005);
 
 
 
