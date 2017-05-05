@@ -20,8 +20,7 @@ class infrared {
 
 public:
 	infrared();
-    // TODO: Change setAngle to take degrees? (Assuming it currently takes 10ths of degrees)
-	void setAngle(int16_t pitch, int16_t roll, int16_t yaw) { pitch_i = pitch/10.0; roll_i = roll/10.0; yaw_i = yaw; }
+	void setAngle(int16_t pitch, int16_t roll, int16_t yaw) { pitch_i = pitch; roll_i = roll; yaw_i = yaw; }
 	void Calculate();
 	float GetDistanceX() { return x; }
 	float GetDistanceY() { return y; }
