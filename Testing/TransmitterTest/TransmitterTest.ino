@@ -5,13 +5,15 @@ volatile unsigned long lastPWMTime;
 volatile uint16_t pwmValue;
 volatile bool autopilotActive;
 
-Logger logger;
+SerialLogger logger;
 Autopilot autopilot;
 
 void setup() {
-    logger = Logger(10);
+    Serial.begin(9600);
+    logger.sync = false;
     autopilot = Autopilot(&logger);
-
+    digitalWrite(10, HIGH);
+    Serial.println("SENDING");
     autopilot.sendPWM(900, 1000, 1100, 1200);
 }
 
