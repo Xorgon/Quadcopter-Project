@@ -10,7 +10,7 @@
 #include <Arduino.h>
 #include "SerialLogger.h"
 #include "infrared.h"
-#include <SoftwareSerial.h>
+#include <AltSoftSerial.h>
 
 #define MSP_ATTITUDE 108
 
@@ -24,8 +24,7 @@ public:
 
 private:
     SerialLogger *logger;
-    infrared sensors;
-    SoftwareSerial *mspSerial;
+    AltSoftSerial *mspSerial;
 
     void sendMSPRequest(uint8_t cmd, uint8_t *data, uint8_t n_bytes);
 

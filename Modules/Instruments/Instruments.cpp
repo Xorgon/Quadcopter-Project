@@ -8,8 +8,8 @@ Instruments::Instruments() {}
 
 Instruments::Instruments(SerialLogger *logger, uint8_t softSerialRX, uint8_t softSerialTX) {
     this->logger = logger;
-    mspSerial = new SoftwareSerial(softSerialRX, softSerialTX);
-    sensors = infrared();
+    mspSerial = new AltSoftSerial(softSerialRX, softSerialTX);
+    mspSerial->begin(9600);
 }
 
 /**
@@ -22,21 +22,35 @@ float Instruments::setPos(float *pos) {
     // Send MSP Request:
     uint8_t data = 0;
     sendMSPRequest(MSP_ATTITUDE, &data, 0);
-    while (!mspSerial->available()) {}
-    float attitude[3];
-    getAttitude(attitude);
 
+    while (!mspSerial->available()) {}
+
+    float attitude[3];
+
+    bool valid = false;
+
+    // Avoid any huge attitude values.
+    while (!valid) {
+        getAttitude(attitude);
+
+        if (attitude[0] < 180 && attitude[0] > -180
+                && attitude[1] < 180 && attitude[1] > -180
+                && attitude[3] <= 360 && attitude[3] >= 0) {
+            valid = true;
+        }
+    }
     String logData = "Roll= " + String(attitude[0])
                      + ", Pitch= " + String(attitude[1])
                      + ", Yaw= " + String(attitude[2]);
     logger->log("Instruments", logData);
 
-    sensors.setAngle(attitude[1], attitude[0], attitude[2]);
-    sensors.Calculate();
+    infrared sensor;
+    sensor.setAngle(attitude[1], attitude[0], attitude[2]);
+    sensor.Calculate();
 
-    pos[0] = sensors.GetDistanceX();
-    pos[1] = sensors.GetDistanceY();
-    pos[2] = sensors.GetDistanceZ();
+    pos[0] = sensor.GetDistanceX()/100.0;
+    pos[1] = sensor.GetDistanceY()/100.0;
+    pos[2] = sensor.GetDistanceZ()/100.0;
     // TODO: Check that these are in the correct reference frame.
 
     logData = "x= " + String(pos[0]) + ", y= " + String(pos[1]) + ", z= " + String(pos[2]);
