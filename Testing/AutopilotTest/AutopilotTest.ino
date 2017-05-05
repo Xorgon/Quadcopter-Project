@@ -19,6 +19,7 @@ void setup() {
 
     autopilot.activeOverride = true;
 
+    digitalWrite(10, HIGH);
 
 }
 
