@@ -5,15 +5,17 @@
 #include "SerialLogger.h"
 
 SerialLogger::SerialLogger() {
-    Serial.begin(9600);
+    sync = false;
     log(F("Logger"), F("Started."));
+    sync = true;
 }
 
 SerialLogger::SerialLogger(uint8_t ledPin) {
-    Serial.begin(9600);
+    sync = false;
     log(F("Logger"), F("Started."));
     this->ledPin = ledPin;
     pinMode(ledPin, OUTPUT);
+    sync = true;
 }
 
 /**
@@ -27,9 +29,11 @@ void SerialLogger::log(String tag, String data) {
 
     digitalWrite(ledPin, HIGH);
 
-    while (!Serial.available());
-    while (Serial.available()) {
-        Serial.read();
+    if (sync) {
+        while (!Serial.available());
+        while (Serial.available()) {
+            Serial.read();
+        }
     }
 
     digitalWrite(ledPin, LOW);
@@ -44,9 +48,11 @@ void SerialLogger::log(String logLine) {
 
     digitalWrite(ledPin, HIGH);
 
-    while (!Serial.available());
-    while (Serial.available()) {
-        Serial.read();
+    if (sync) {
+        while (!Serial.available());
+        while (Serial.available()) {
+            Serial.read();
+        }
     }
 
     digitalWrite(ledPin, LOW);

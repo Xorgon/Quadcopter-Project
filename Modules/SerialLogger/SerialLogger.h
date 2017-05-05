@@ -26,6 +26,8 @@ public:
 
     String parseMillis(uint32_t millis);
 
+    bool sync;
+
 private:
     uint8_t ledPin;
 };
