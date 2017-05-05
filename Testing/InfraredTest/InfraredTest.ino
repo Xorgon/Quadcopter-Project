@@ -9,7 +9,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   infrared sensor;
-  sensor.setAngle(0, 300, 0);
+  sensor.setAngle(0, 0, 0);
   sensor.Calculate();
   
   //float TheoreticalValue = 28000 * pow(analogRead(A2), -1.58);    //debug
@@ -19,13 +19,15 @@ void loop() {
   float x= sensor.GetDistanceX();
   float y= sensor.GetDistanceY();
   float z= sensor.GetDistanceZ();
-  Serial.println("begin");
+//  Serial.println("begin");
   Serial.print("x:");
   Serial.println(x);
-  Serial.print("y:");
-  Serial.println(y);
-  Serial.print("z:");
-  Serial.println(z);
+  Serial.print("analog");
+  Serial.println(analogRead(A0));
+  //Serial.print("y:");
+  //Serial.println(y);
+  //Serial.print("z:")
+  //Serial.println(z);
 
   
 }

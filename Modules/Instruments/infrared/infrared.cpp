@@ -21,34 +21,35 @@ void infrared::Calculate() {
 
     // TODO: Test this filter method and add a better filter if necessary (which it probably is).
     // change condition
-    int mean[3] = {0};
+    float mean[3] = {0};
     float sensorsum = 0;
     float sensorValue[3] = {0};
-    float sensorInput[5]={0};
+    float sensorInput[25]={0};
     float max;
     float min;
 
 
-    do {
+    //do {
         max=0.0;
         min=10000.0;
         
-        for (int n = 0; n < 5; n++) {sensorInput[n] = analogRead(A0);}   //Body Frame x direction infrared sensor
+        for (int n = 0; n < 25; n++) {sensorInput[n] = analogRead(A0);
+        delay(1);}   //Body Frame x direction infrared sensor
         
-        for(int n=0; n<5;n++){
+        for(int n=0; n<25;n++){
         if(sensorInput[n]>max) max=sensorInput[n];
         if(sensorInput[n]<min) min=sensorInput[n];
            sensorsum = sensorsum + sensorInput[n];
         }
         
         
-        mean[0] = (sensorsum-max-min) / 3;
-        sensorsum = 0;        //clear and run
+        mean[0] = (sensorsum-max-min) / 3.0;
+        sensorsum = 0.0;        //clear and run
         //Serial.print("mean x:");  //debug
         //Serial.println(mean[0]);
 
 
-    } while (abs(analogRead(A0) - mean[0]) / mean[0] > 0.005);
+    //} while ((abs(analogRead(A0) - mean[0]) / mean[0]) > 0.0005);
 
 
     do {
@@ -63,10 +64,10 @@ void infrared::Calculate() {
            sensorsum = sensorsum + sensorInput[n];
         }
         
-        mean[1] = (sensorsum-max-min) / 3;
-        sensorsum = 0;        //clear and run
+        mean[1] = (sensorsum-max-min) / 3.0;
+        sensorsum = 0.0;        //clear and run
 
-    } while (abs(analogRead(A1) - mean[1]) / mean[1] > 0.005);
+    } while (abs(analogRead(A1) - mean[1]) / mean[1] > 0.0005);
 
 
     do {
@@ -80,11 +81,11 @@ void infrared::Calculate() {
            sensorsum = sensorsum + sensorInput[n];
         }
         
-        mean[2] = (sensorsum-max-min) / 3;
-        sensorsum = 0;        //clear and run
+        mean[2] = (sensorsum-max-min) / 3.0;
+        sensorsum = 0.0;        //clear and run
 
 
-    } while (abs(analogRead(A2) - mean[2]) / mean[2] > 0.005);
+    } while ((abs(analogRead(A2) - mean[2]) / mean[2]) > 0.0005);
 
 
 
