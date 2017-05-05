@@ -25,8 +25,8 @@ void setup() {
 
     logger = SerialLogger(11);
     autopilot = Autopilot(&logger);
-    grabber = Grabber(9, &logger);
-    instruments = Instruments(&logger, 3, 4);
+    grabber = Grabber(7, &logger);
+    instruments = Instruments(&logger, 8, 9);
 
     //TODO: Set target correctly.
     tar[0] = 1.0;
