@@ -68,8 +68,10 @@ void infrared::Calculate() {
 
     // TODO: Individual sensor calibration.
 	for (int j = 0; j < 3; j++) {															// To relate the sensor analogue value to distance
-		sensorValue[j] = 28000 * pow(mean[j], -1.58);										// another set of calculation could be given by
-        //Serial.print(j);
+		sensorValue[0] = 1271938.7 * pow(mean[j], -1.7875687);										// another set of calculation could be given by
+        	sensorValue[1] = 176468.59 * pow(mean[j], -1.4945045);
+		sensorValue[2] = 783622.75 * pow(mean[j], -1.7171497);
+	//Serial.print(j);
         //Serial.print("_Absolute Value:");  //debug
         //Serial.println(sensorValue[j]);
 	}																						// Distance = 12348.85 * ADC^{-1.05} - 4
