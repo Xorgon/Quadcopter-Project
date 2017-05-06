@@ -8,15 +8,19 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include "math.h"
-#include "Logger.h"
+#include "SerialLogger.h"
+
+#define SERVO_OFFSET 4
 
 class Grabber {
 public:
     Grabber();
 
-    Grabber(int servoPin, Logger *logger);
+    Grabber(int servoPin, SerialLogger *logger);
 
     void run(float pos[], float target[]);
+
+    void release();
 
 private:
 
@@ -24,11 +28,9 @@ private:
 #define posTolerance 0.1
 
     Servo servo;
-    Logger *logger;
+    SerialLogger *logger;
 
     void moveTo(int loc);
-
-    void release();
 };
 
 #endif //SKETCH_DISPENSE_H

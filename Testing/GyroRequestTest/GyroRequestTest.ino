@@ -2,7 +2,7 @@
 
 #define MSP_ATTITUDE 108
 
-SoftwareSerial mspSerial(11, 12); // RX TX
+SoftwareSerial mspSerial(3, 4); // RX TX
 
 void setup() {
     mspSerial.begin(9600);

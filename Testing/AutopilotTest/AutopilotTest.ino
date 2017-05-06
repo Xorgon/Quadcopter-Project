@@ -5,7 +5,7 @@ volatile unsigned long lastPWMTime;
 volatile uint16_t pwmValue;
 volatile bool autopilotActive;
 
-LoggerLite logger;
+SerialLogger logger;
 Autopilot autopilot;
 
 float tar[] = {0.0, 0.0, 0.0};
@@ -14,10 +14,12 @@ float pos[] = {1.0, 1.0, 1.0};
 void setup() {
     Serial.begin(9600);
 
+    logger.sync = false;
     autopilot = Autopilot(&logger);
 
     autopilot.activeOverride = true;
 
+    digitalWrite(10, HIGH);
 
 }
 

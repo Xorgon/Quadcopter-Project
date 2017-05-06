@@ -4,9 +4,19 @@
 
 #include "SerialLogger.h"
 
-SerialLogger::Logger() {
+SerialLogger::SerialLogger() {
+    sync = false;
     log(F("Logger"), F("Started."));
-};
+    sync = true;
+}
+
+SerialLogger::SerialLogger(uint8_t ledPin) {
+    sync = false;
+    log(F("Logger"), F("Started."));
+    this->ledPin = ledPin;
+    pinMode(ledPin, OUTPUT);
+    sync = true;
+}
 
 /**
  * Prepares data for logging and sends it through serial communications.
@@ -16,6 +26,17 @@ SerialLogger::Logger() {
 void SerialLogger::log(String tag, String data) {
     String logLine = "[" + parseMillis(millis()) + "][" + tag + "] " + data + "\n";
     Serial.print(logLine);
+
+    digitalWrite(ledPin, HIGH);
+
+    if (sync) {
+        while (!Serial.available());
+        while (Serial.available()) {
+            Serial.read();
+        }
+    }
+
+    digitalWrite(ledPin, LOW);
 }
 
 /**
@@ -24,6 +45,17 @@ void SerialLogger::log(String tag, String data) {
  */
 void SerialLogger::log(String logLine) {
     Serial.print(logLine);
+
+    digitalWrite(ledPin, HIGH);
+
+    if (sync) {
+        while (!Serial.available());
+        while (Serial.available()) {
+            Serial.read();
+        }
+    }
+
+    digitalWrite(ledPin, LOW);
 }
 
 /**

@@ -13,19 +13,18 @@
 //  ~infrared x;                //to save memories
 //	I hope it works :)
 
-#include "infrared.cpp"
-#include <Adruino.h>
+#include <Arduino.h>
 using namespace std;
 
 class infrared {
 
 public:
 	infrared();
-	void setAngle(int16_t pitch, int16_t roll, int16_t yaw) { pitch_i = pitch/10.0; roll_i = roll/10.0; yaw_i = yaw; }
+	void setAngle(int16_t pitch, int16_t roll, int16_t yaw) { pitch_i = pitch; roll_i = roll; yaw_i = yaw; }
 	void Calculate();
-	void GetDistanceX() { return x; }
-	void GetDistanceY() { return y; }
-	void GetDistanceZ() { return z; }
+	float GetDistanceX() { return x; }
+	float GetDistanceY() { return y; }
+	float GetDistanceZ() { return z; }
 	~infrared();
 
 
@@ -44,4 +43,4 @@ private:
 
 
 
-#endif 
+#endif 3

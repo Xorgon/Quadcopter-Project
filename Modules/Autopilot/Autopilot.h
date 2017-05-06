@@ -73,10 +73,10 @@ private:
 #define ACTIVE_PWM_TOLERANCE 100
 #define ACTIVE_PIN 10
 
-#define PITCH_PWM_PIN 5
-#define ROLL_PWM_PIN 6
-#define YAW_PWM_PIN 7
-#define THROTTLE_PWM_PIN 8
+#define PITCH_PWM_PIN 3
+#define ROLL_PWM_PIN 4
+#define YAW_PWM_PIN 5
+#define THROTTLE_PWM_PIN 6
 
     Servo pitchPWM;
     Servo yawPWM;
