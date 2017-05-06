@@ -29,7 +29,7 @@ def run_PID(set_point=100, start_point=0,
     while (time() - start_time < length):
         loops += 1        
         sleep(0.1)
-        error = set_point - point + random.randint(-1,1) * noise
+        error = set_point - point + random.randint(-noise,noise)
         now = time()
         time_dif = now - last_time
 
@@ -47,11 +47,9 @@ def run_PID(set_point=100, start_point=0,
         last_time = now
 
         deltaP += out
+        deltaP += force
 
         point += deltaP
-
-        # Some imaginary force acting on the point.
-        point += force
 
         points.append(point)
         times.append(now-start_time)
