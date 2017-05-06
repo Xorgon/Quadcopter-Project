@@ -7,10 +7,10 @@ Created on Tue Feb 07 14:33:55 2017
 
 from matplotlib.pyplot import plot
 from time import time, sleep
-
+import random
 
 def run_PID(set_point=100, start_point=0,
-            K_p=0.5, K_i=0, K_d=0.1, length=5, force=0, max_out=20):
+            K_p=0.5, K_i=0, K_d=0.1, length=5, force=0, max_out=20, noise=1):
     start_time = time()
     point = start_point
     points = [start_point]
@@ -25,9 +25,11 @@ def run_PID(set_point=100, start_point=0,
     last_error = set_point - start_point
     last_time = start_time
     deltaP = 0
+    loops = 0
     while (time() - start_time < length):
+        loops += 1        
         sleep(0.1)
-        error = set_point - point
+        error = set_point - point + random.randint(-1,1) * noise
         now = time()
         time_dif = now - last_time
 
@@ -61,6 +63,7 @@ def run_PID(set_point=100, start_point=0,
         zero.append(0)
     print("Point at: %.2f" % point)
     print("Out at: %.2f" % outs[-1])
+    print("Total loops: %.0f, average loops per second: %.2f" % (loops, loops/length))
     plot(times, points, times, target)
     plot(times, outs, times, zero)
 #    plot(times, potentials, "g", times, integrals, "r", times, derivatives, "blue")
