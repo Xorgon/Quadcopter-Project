@@ -36,9 +36,9 @@ private:
 
     bool lastActive;
 
-#define MAX_PITCH 500
-#define MAX_ROLL 500
-#define MAX_THROTTLE 500
+#define MAX_PITCH 100
+#define MAX_ROLL 100
+#define MAX_THROTTLE 350
 
 #define KP_X 0.5
 #define KP_Y 0.5

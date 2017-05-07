@@ -110,7 +110,7 @@ uint16_t Autopilot::calculateYaw(float errYaw) {
     return pwmOut;
 }
 
-// TODO: Check throttle active range.
+// TODO: Find approximate zero-upwards-speed setting and apply it here for smoother flight.
 uint16_t Autopilot::calculateThrottle(float errZ) {
     if (lastErrZ == 999) {
         lastErrZ = errZ;
