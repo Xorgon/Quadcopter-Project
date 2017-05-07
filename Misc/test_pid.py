@@ -5,7 +5,7 @@ Created on Tue Feb 07 14:33:55 2017
 @author: Elijah
 """
 
-from matplotlib.pyplot import plot
+import matplotlib.pyplot as plt
 from time import time, sleep
 import random
 
@@ -62,6 +62,17 @@ def run_PID(set_point=100, start_point=0,
     print("Point at: %.2f" % point)
     print("Out at: %.2f" % outs[-1])
     print("Total loops: %.0f, average loops per second: %.2f" % (loops, loops/length))
-    plot(times, points, times, target)
-    plot(times, outs, times, zero)
+    plt.plot(times, points, times, target)
+    plt.plot(times, outs, times, zero)
+    plt.xlabel("Time (s)", fontsize=14)
+    plt.ylabel("Position", fontsize=14)
+    plt.title("PID Simulation Plot", fontsize=18)
+    plt.text(length*0.75, set_point*0.8, r"$K_p = %.1f$" % K_p, fontsize=16)
+    plt.text(length*0.75, set_point*0.7, r"$K_i = %.1f$" % K_i, fontsize=16)
+    plt.text(length*0.75, set_point*0.6, r"$K_d = %.1f$" % K_d, fontsize=16)
+    plt.text(length*0.75, set_point*0.5, r"$force = %.0f$" % force, fontsize=16)
+    plt.text(length*0.75, set_point*0.4, r"$noise = %.0f$" % noise, fontsize=16)
+    cur_axis = list(plt.axis())
+    cur_axis[1] = length
+    plt.axis(cur_axis)
 #    plot(times, potentials, "g", times, integrals, "r", times, derivatives, "blue")
