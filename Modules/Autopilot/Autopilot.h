@@ -40,16 +40,17 @@ private:
 #define MAX_ROLL 500
 #define MAX_THROTTLE 500
 
-#define KP_X 0.1
-#define KP_Y 0.1
-#define KP_Z 0.1
-#define KP_YAW 0.1
+#define KP_X 0.5
+#define KP_Y 0.5
+#define KP_Z 0.5
+#define KP_YAW 0.5
 
-#define KD_X 0.3
-#define KD_Y 0.3
+#define KD_X 0.1
+#define KD_Y 0.1
+#define KD_Z 0.1
 
-#define KI_Z 0.3
-#define KI_YAW 0.3
+#define KI_Z 0.1
+#define KI_YAW 0.1
 
 #define ROLL_PD_PWM_FACTOR 1000
 #define PITCH_PD_PWM_FACTOR 1000
@@ -58,6 +59,7 @@ private:
 
     float lastErrX;
     float lastErrY;
+    float lastErrZ;
 
     uint32_t lastYawTime;
     uint32_t lastThrottleTime;

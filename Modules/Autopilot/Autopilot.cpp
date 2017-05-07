@@ -11,6 +11,7 @@ Autopilot::Autopilot(SerialLogger *logger) {
 
     lastErrX = 999;
     lastErrY = 999;
+    lastErrZ = 999;
 
     yawIntegral = 0;
     throttleIntegral = 0;
@@ -107,16 +108,21 @@ uint16_t Autopilot::calculateYaw(float errYaw) {
 
 // TODO: Check throttle active range.
 uint16_t Autopilot::calculateThrottle(float errZ) {
+    if (lastErrZ == 999) {
+        lastErrZ = errZ;
+    }
+
     uint32_t now = millis();
     if (lastThrottleTime == 0) {
         lastThrottleTime = now;
     }
     throttleIntegral += (now - lastThrottleTime) * errZ / 1000;
 
-    float pdOut = KP_Z * errZ + KI_Z * throttleIntegral;
+    float pdOut = KP_Z * errZ + KI_Z * throttleIntegral + KD_Z * (errZ - lastErrZ);
 
     uint16_t pwmOut = 1500 + roundf(pdOut * THROTTLE_PI_PWM_FACTOR);
 
+    lastErrZ = errZ;
     lastThrottleTime = now;
 
     if (int(pwmOut - 1500) > 0 && int(pwmOut - 1500) > MAX_THROTTLE) { pwmOut = 1500 + MAX_THROTTLE; }
