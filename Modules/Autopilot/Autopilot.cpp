@@ -64,6 +64,9 @@ uint16_t Autopilot::calculatePitch(float errX) {
     }
     float pdOut = KP_X * errX + KD_X * (errX - lastErrX);
 
+    // Switch reference frame (+ve x is backwards).
+    pdOut = -pdOut;
+
     uint16_t pwmOut = 1500 + roundf(pdOut * PITCH_PD_PWM_FACTOR);
 
     lastErrX = errX;
@@ -79,6 +82,7 @@ uint16_t Autopilot::calculateRoll(float errY) {
         lastErrY = errY;
     }
     float pdOut = KP_Y * errY + KD_Y * (errY - lastErrY);
+    // Reference frame is correct (+ve y is towards +ve roll).
 
     uint16_t pwmOut = 1500 + roundf(pdOut * ROLL_PD_PWM_FACTOR);
 

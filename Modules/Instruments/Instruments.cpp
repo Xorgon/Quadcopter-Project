@@ -51,7 +51,6 @@ float Instruments::setPos(float *pos) {
     pos[0] = sensor.GetDistanceX()/100.0;
     pos[1] = sensor.GetDistanceY()/100.0;
     pos[2] = sensor.GetDistanceZ()/100.0;
-    // TODO: Check that these are in the correct reference frame.
 
     logData = "x= " + String(pos[0]) + ", y= " + String(pos[1]) + ", z= " + String(pos[2]);
     logger->log("Instruments", logData);
