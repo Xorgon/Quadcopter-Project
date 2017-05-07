@@ -29,8 +29,10 @@ private:
 
     Servo servo;
     SerialLogger *logger;
+    Scheduler scheduler;
 
-    void moveTo(int loc);
+    void close();
+
 };
 
 #endif //SKETCH_DISPENSE_H

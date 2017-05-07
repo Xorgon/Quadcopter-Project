@@ -19,6 +19,7 @@ Grabber::Grabber(int servoPin, SerialLogger *logger) {
     servo.attach(servoPin);
     servo.write(0 + SERVO_OFFSET);
     this->logger = logger;
+    scheduler = Scheduler();
 }
 
 /**
@@ -26,7 +27,10 @@ Grabber::Grabber(int servoPin, SerialLogger *logger) {
  */
 void Grabber::release() {
     servo.write(140 + SERVO_OFFSET);
-    delay(2000); // TODO: Make this be a scheduled event rather than a delay.
+    scheduler.schedule(this->close); // TODO: Test scheduler.
+}
+
+void Grabber::close() {
     servo.write(0 + SERVO_OFFSET);
 }
 
@@ -36,6 +40,7 @@ void Grabber::release() {
  * @param target Target position vector.
  */
 void Grabber::run(float *pos, float *target) {
+    scheduler.update();
     if (fabs(pos[0] - target[0]) < posTolerance,
             fabs(pos[1] - target[1]) < posTolerance,
             fabs(pos[2] - target[2]) < posTolerance) {
