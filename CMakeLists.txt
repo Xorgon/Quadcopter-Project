@@ -10,7 +10,6 @@ include_directories(Modules/Instruments/)
 include_directories(Modules/Instruments/infrared)
 include_directories(Modules/Grabber/)
 include_directories(libraries/PetitFS/src)
-include_directories(libraries/AltSoftSerial)
 include_directories(libraries/Scheduler)
 include_directories(libraries/SD/src)
 
