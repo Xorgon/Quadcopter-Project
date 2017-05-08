@@ -48,7 +48,7 @@ float Instruments::setPos(float *pos) {
                      + ", Yaw= " + String(attitude[2]);
     logger->log("Instruments", logData);
 
-    infrared sensor;
+    infrared sensor = infrared(logger);
     sensor.setAngle(attitude[1], attitude[0], attitude[2]);
     sensor.Calculate();
 
