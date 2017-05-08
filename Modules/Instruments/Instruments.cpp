@@ -19,12 +19,11 @@ Instruments::Instruments(SerialLogger *logger, uint8_t softSerialRX, uint8_t sof
  */
 float Instruments::setPos(float *pos) {
 
-    // TODO: Re-enable and fix MSP requests (Naze SoftSerial interferes with Arming signal).
-//    // Send MSP Request:
-//    uint8_t data = 0;
-//    sendMSPRequest(MSP_ATTITUDE, &data, 0);
-//
-//    while (!mspSerial->available()) {}
+    // Send MSP Request:
+    uint8_t data = 0;
+    sendMSPRequest(MSP_ATTITUDE, &data, 0);
+
+    while (!mspSerial->available()) {}
 
     float attitude[3];
 
@@ -32,10 +31,7 @@ float Instruments::setPos(float *pos) {
 
     // Avoid any huge attitude values.
     while (!valid) {
-//        getAttitude(attitude);
-        attitude[0] = 0.0;
-        attitude[1] = 0.0;
-        attitude[2] = 0.0;
+        getAttitude(attitude);
 
         if (attitude[0] < 180 && attitude[0] > -180
                 && attitude[1] < 180 && attitude[1] > -180
