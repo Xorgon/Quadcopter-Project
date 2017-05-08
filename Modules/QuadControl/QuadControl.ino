@@ -1,9 +1,9 @@
 #include <Arduino.h>
 #include "Autopilot.h"
-//#include "Grabber.h"
+#include "Grabber.h"
 #include "Instruments.h"
 
-//Grabber grabber;
+Grabber grabber;
 Autopilot autopilot;
 Instruments instruments;
 SerialLogger logger;
@@ -24,9 +24,13 @@ void setup() {
     pinMode(13, OUTPUT);
 
     logger = SerialLogger(11);
+
+    // Comment/uncomment to enable/disable tethered logging.
+    logger.sync = false;
+
     Serial.begin(9600);
     autopilot = Autopilot(&logger);
-//    grabber = Grabber(7, &logger);
+    grabber = Grabber(7, &logger, 3000);
     instruments = Instruments(&logger, 8, 9);
 
     tar[0] = 1.0;
@@ -47,12 +51,12 @@ void loop() {
 
     yaw = instruments.setPos(pos);
 
-    // Uncomment/comment these out to enable/disable hover only.
+    // Comment/uncomment these out to enable/disable hover only.
     pos[0] = tar[0];
     pos[1] = tar[1];
 
     autopilot.run(tar, pos, yawTar, yaw);
-//    grabber.run(pos, tar);
+    grabber.run(pos, tar);
 
     digitalWrite(13, LOW);
 
