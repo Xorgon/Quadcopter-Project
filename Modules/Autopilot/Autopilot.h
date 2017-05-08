@@ -57,7 +57,7 @@ private:
 #define ROLL_PD_PWM_FACTOR 500
 #define PITCH_PD_PWM_FACTOR 500
 #define YAW_PI_PWM_FACTOR 500
-#define THROTTLE_PI_PWM_FACTOR 250
+#define THROTTLE_PI_PWM_FACTOR 50
 
     float lastErrX;
     float lastErrY;
@@ -76,6 +76,7 @@ private:
 #define ACTIVE_PWM 1900
 #define ACTIVE_PWM_TOLERANCE 100
 #define ACTIVE_PIN 10
+#define ACTIVE_LED_PIN 12
 
 #define PITCH_PWM_PIN 3
 #define ROLL_PWM_PIN 4
