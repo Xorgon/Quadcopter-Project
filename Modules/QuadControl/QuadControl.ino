@@ -24,6 +24,7 @@ void setup() {
     pinMode(13, OUTPUT);
 
     logger = SerialLogger(11);
+    Serial.begin(9600);
     autopilot = Autopilot(&logger);
     grabber = Grabber(7, &logger);
     instruments = Instruments(&logger, 8, 9);
