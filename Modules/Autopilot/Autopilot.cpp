@@ -71,6 +71,10 @@ uint16_t Autopilot::calculatePitch(float errX) {
 
     uint16_t pwmOut = 1500 + roundf(pdOut * PITCH_PD_PWM_FACTOR);
 
+    String logData = " Pitch | pdOut= " + String(pdOut)
+                     + ", pwmOut= " + String(pwmOut);
+    logger->log("Autopilot", logData);
+
     lastErrX = errX;
 
     if (int(pwmOut - 1500) > 0 && int(pwmOut - 1500) > MAX_PITCH) { pwmOut = 1500 + MAX_PITCH; }
@@ -87,6 +91,10 @@ uint16_t Autopilot::calculateRoll(float errY) {
     // Reference frame is correct (+ve y is towards +ve roll).
 
     uint16_t pwmOut = 1500 + roundf(pdOut * ROLL_PD_PWM_FACTOR);
+
+    String logData = " Roll | pdOut= " + String(pdOut)
+                     + ", pwmOut= " + String(pwmOut);
+    logger->log("Autopilot", logData);
 
     lastErrY = errY;
 
@@ -107,6 +115,10 @@ uint16_t Autopilot::calculateYaw(float errYaw) {
 
     uint16_t pwmOut = 1500 + roundf(pdOut * YAW_PI_PWM_FACTOR);
 
+    String logData = " Yaw | pdOut= " + String(pdOut)
+                     + ", pwmOut= " + String(pwmOut);
+    logger->log("Autopilot", logData);
+
     lastYawTime = now;
 
     return pwmOut;
@@ -126,6 +138,10 @@ uint16_t Autopilot::calculateThrottle(float errZ) {
     float pdOut = KP_Z * errZ + KI_Z * throttleIntegral + KD_Z * (errZ - lastErrZ);
 
     uint16_t pwmOut = THROTTLE_CENTER + roundf(pdOut * THROTTLE_PI_PWM_FACTOR);
+
+    String logData = " Throttle | pdOut= " + String(pdOut)
+                     + ", pwmOut= " + String(pwmOut);
+    logger->log("Autopilot", logData);
 
     lastErrZ = errZ;
     lastThrottleTime = now;
