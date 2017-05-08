@@ -14,33 +14,45 @@
 //	I hope it works :)
 
 #include <Arduino.h>
+
 using namespace std;
 
 class infrared {
 
 public:
-	infrared();
-	void setAngle(int16_t pitch, int16_t roll, int16_t yaw) { pitch_i = pitch; roll_i = roll; yaw_i = yaw; }
-	void Calculate();
-	float GetDistanceX() { return x; }
-	float GetDistanceY() { return y; }
-	float GetDistanceZ() { return z; }
-	~infrared();
+    infrared();
 
+    infrared(SerialLogger *logger);
+
+    void setAngle(int16_t pitch, int16_t roll, int16_t yaw) {
+        pitch_i = pitch;
+        roll_i = roll;
+        yaw_i = yaw;
+    }
+
+    void Calculate();
+
+    float GetDistanceX() { return x; }
+
+    float GetDistanceY() { return y; }
+
+    float GetDistanceZ() { return z; }
+
+    ~infrared();
 
 
 private:
-	int16_t pitch_i;   
-	int16_t roll_i;
-	int16_t yaw_i;
-	float x;
-	float y;
-	float z;
+    SerialLogger *logger;
+
+    int16_t pitch_i;
+    int16_t roll_i;
+    int16_t yaw_i;
+    float x;
+    float y;
+    float z;
 
 
 };
-
-
 
 
 #endif 3
