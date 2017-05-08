@@ -28,7 +28,6 @@ void setup() {
     grabber = Grabber(7, &logger);
     instruments = Instruments(&logger, 8, 9);
 
-    //TODO: Set target correctly.
     tar[0] = 1.0;
     tar[1] = 1.0;
     tar[2] = 1.0;
@@ -46,6 +45,11 @@ void loop() {
     digitalWrite(13, HIGH);
 
     yaw = instruments.setPos(pos);
+
+    // Uncomment/comment these out to enable/disable hover only.
+    pos[0] = tar[0];
+    pos[1] = tar[1];
+
     autopilot.run(tar, pos, yawTar, yaw);
     grabber.run(pos, tar);
 
