@@ -110,7 +110,6 @@ uint16_t Autopilot::calculateYaw(float errYaw) {
     return pwmOut;
 }
 
-// TODO: Find approximate zero-upwards-speed setting and apply it here for smoother flight.
 uint16_t Autopilot::calculateThrottle(float errZ) {
     if (lastErrZ == 999) {
         lastErrZ = errZ;
@@ -124,13 +123,15 @@ uint16_t Autopilot::calculateThrottle(float errZ) {
 
     float pdOut = KP_Z * errZ + KI_Z * throttleIntegral + KD_Z * (errZ - lastErrZ);
 
-    uint16_t pwmOut = 1500 + roundf(pdOut * THROTTLE_PI_PWM_FACTOR);
+    uint16_t pwmOut = THROTTLE_CENTER + roundf(pdOut * THROTTLE_PI_PWM_FACTOR);
 
     lastErrZ = errZ;
     lastThrottleTime = now;
 
-    if (int(pwmOut - 1500) > 0 && int(pwmOut - 1500) > MAX_THROTTLE) { pwmOut = 1500 + MAX_THROTTLE; }
-    if (int(pwmOut - 1500) < 0 && -(int(pwmOut - 1500)) > MAX_THROTTLE) { pwmOut = 1500 - MAX_THROTTLE; }
+    if (int(pwmOut - THROTTLE_CENTER) > 0 && int(pwmOut - THROTTLE_CENTER) > MAX_THROTTLE) {
+        pwmOut = THROTTLE_CENTER + MAX_THROTTLE; }
+    if (int(pwmOut - THROTTLE_CENTER) < 0 && -(int(pwmOut - THROTTLE_CENTER)) > MIN_THROTTLE) {
+        pwmOut = THROTTLE_CENTER - MIN_THROTTLE; }
 
     return pwmOut;
 }

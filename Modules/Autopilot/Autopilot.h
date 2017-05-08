@@ -38,7 +38,9 @@ private:
 
 #define MAX_PITCH 100
 #define MAX_ROLL 100
-#define MAX_THROTTLE 350
+#define MAX_THROTTLE 50
+#define MIN_THROTTLE 250
+#define THROTTLE_CENTER 1400
 
 #define KP_X 0.5
 #define KP_Y 0.5
@@ -52,10 +54,10 @@ private:
 #define KI_Z 0.1
 #define KI_YAW 0.1
 
-#define ROLL_PD_PWM_FACTOR 1000
-#define PITCH_PD_PWM_FACTOR 1000
-#define YAW_PI_PWM_FACTOR 1000
-#define THROTTLE_PI_PWM_FACTOR 1000
+#define ROLL_PD_PWM_FACTOR 500
+#define PITCH_PD_PWM_FACTOR 500
+#define YAW_PI_PWM_FACTOR 500
+#define THROTTLE_PI_PWM_FACTOR 250
 
     float lastErrX;
     float lastErrY;
