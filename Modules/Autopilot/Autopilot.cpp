@@ -30,7 +30,9 @@ Autopilot::Autopilot(SerialLogger *logger) {
     lastActive = false;
 
     pinMode(ACTIVE_PIN, OUTPUT);
+    pinMode(ACTIVE_LED_PIN, OUTPUT);
     digitalWrite(ACTIVE_PIN, LOW);
+    digitalWrite(ACTIVE_LED_PIN, LOW);
 }
 
 void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
@@ -157,9 +159,11 @@ static void Autopilot::onFalling() {
     if (pwmValue > (ACTIVE_PWM - ACTIVE_PWM_TOLERANCE)
         and pwmValue < (ACTIVE_PWM + ACTIVE_PWM_TOLERANCE)) {
         digitalWrite(ACTIVE_PIN, HIGH);
+        digitalWrite(ACTIVE_LED_PIN, HIGH);
         autopilotActive = true;
     } else {
         digitalWrite(ACTIVE_PIN, LOW);
+        digitalWrite(ACTIVE_LED_PIN, LOW);
         autopilotActive = false;
     }
 }
