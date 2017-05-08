@@ -1,9 +1,9 @@
 #include <Arduino.h>
 #include "Autopilot.h"
-#include "Grabber.h"
+//#include "Grabber.h"
 #include "Instruments.h"
 
-Grabber grabber;
+//Grabber grabber;
 Autopilot autopilot;
 Instruments instruments;
 SerialLogger logger;
@@ -26,12 +26,12 @@ void setup() {
     logger = SerialLogger(11);
     Serial.begin(9600);
     autopilot = Autopilot(&logger);
-    grabber = Grabber(7, &logger);
+//    grabber = Grabber(7, &logger);
     instruments = Instruments(&logger, 8, 9);
 
     tar[0] = 1.0;
     tar[1] = 1.0;
-    tar[2] = 1.0;
+    tar[2] = 0.8;
     yawTar = 0;
 
     // Ensure nothing happens until actual values are acquired.
@@ -52,7 +52,7 @@ void loop() {
     pos[1] = tar[1];
 
     autopilot.run(tar, pos, yawTar, yaw);
-    grabber.run(pos, tar);
+//    grabber.run(pos, tar);
 
     digitalWrite(13, LOW);
 
