@@ -36,8 +36,8 @@ private:
 
     bool lastActive;
 
-#define MAX_PITCH 100
-#define MAX_ROLL 100
+#define MAX_PITCH 50
+#define MAX_ROLL 50
 #define MAX_THROTTLE 50
 #define MIN_THROTTLE 250
 #define THROTTLE_CENTER 1400
@@ -54,9 +54,9 @@ private:
 #define KI_Z 0.1
 #define KI_YAW 0.1
 
-#define ROLL_PD_PWM_FACTOR 500
-#define PITCH_PD_PWM_FACTOR 500
-#define YAW_PI_PWM_FACTOR 500
+#define ROLL_PD_PWM_FACTOR 50
+#define PITCH_PD_PWM_FACTOR 50
+#define YAW_PI_PWM_FACTOR 50
 #define THROTTLE_PI_PWM_FACTOR 50
 
     float lastErrX;
