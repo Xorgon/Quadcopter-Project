@@ -14,6 +14,7 @@
 //	I hope it works :)
 
 #include <Arduino.h>
+#include "SerialLogger.h"
 
 using namespace std;
 
