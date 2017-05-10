@@ -27,7 +27,7 @@ void infrared::Calculate() {
     // change condition
 
     int size = 25;
-    float sensorInput[size] = {0};
+    float sensorInput[25] = {0};
     float hold;
     int pass;
     float mean[3] = {0};
