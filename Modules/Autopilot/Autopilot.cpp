@@ -165,17 +165,26 @@ static void Autopilot::onRising() {
 }
 
 static void Autopilot::onFalling() {
-    attachInterrupt(0, onRising, RISING);
+//    attachInterrupt(0, onRising, RISING);
     pwmValue = micros() - lastPWMTime;
     if (pwmValue > (ACTIVE_PWM - ACTIVE_PWM_TOLERANCE)
         and pwmValue < (ACTIVE_PWM + ACTIVE_PWM_TOLERANCE)) {
         digitalWrite(ACTIVE_PIN, HIGH);
         digitalWrite(ACTIVE_LED_PIN, HIGH);
         autopilotActive = true;
+        attachInterrupt(0, onRising, RISING);
     } else {
-        digitalWrite(ACTIVE_PIN, LOW);
-        digitalWrite(ACTIVE_LED_PIN, LOW);
-        autopilotActive = false;
+        if (autopilotActive = true) {
+            digitalWrite(ACTIVE_PIN, LOW);
+            digitalWrite(ACTIVE_LED_PIN, LOW);
+            autopilotActive = false;
+        } else {
+            attachInterrupt(0, onRising, RISING);
+            digitalWrite(ACTIVE_PIN, LOW);
+            digitalWrite(ACTIVE_LED_PIN, LOW);
+            autopilotActive = false;
+        }
+
     }
 }
 

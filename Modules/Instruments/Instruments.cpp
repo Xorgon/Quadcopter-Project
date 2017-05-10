@@ -24,7 +24,6 @@ float Instruments::setPos(float *pos) {
     sendMSPRequest(MSP_ATTITUDE, &data, 0);
 
     while (!mspSerial->available()) {}
-
     float attitude[3];
 
     bool valid = false;

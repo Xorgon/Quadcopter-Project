@@ -24,17 +24,16 @@ uint32_t lastLoopTime;
 void setup() {
     pinMode(12, OUTPUT);
     pinMode(13, OUTPUT);
-
+    digitalWrite(13, HIGH);
     logger = SerialLogger(11);
 
     // Comment/uncomment to enable/disable tethered logging.
     logger.sync = false;
 
-    Serial.begin(9600);
+    Serial.begin(57600);
     autopilot = Autopilot(&logger);
     grabber = Grabber(7, &logger, 3000);
     instruments = Instruments(&logger, 8, 9);
-
     tar[0] = 1.0;
     tar[1] = 1.0;
     tar[2] = 0.8;
@@ -50,20 +49,20 @@ void setup() {
 
 void loop() {
     // General loop running LED.
-    digitalWrite(13, HIGH);
+    //digitalWrite(13, HIGH);
 
-    Serial.println("Before");
     yaw = instruments.setPos(pos);
-    Serial.println("After");
 
     // Comment/uncomment these out to enable/disable hover only.
     pos[0] = tar[0];
     pos[1] = tar[1];
 
+    Serial.println(pwmValue);
+
     autopilot.run(tar, pos, yawTar, yaw);
     grabber.run(pos, tar);
 
-    digitalWrite(13, LOW);
+    //digitalWrite(13, LOW);
 
     if (autopilotActive) {
         digitalWrite(12, HIGH);
