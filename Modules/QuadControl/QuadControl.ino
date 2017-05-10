@@ -19,6 +19,8 @@ volatile unsigned long lastPWMTime;
 volatile uint16_t pwmValue;
 volatile bool autopilotActive;
 
+uint32_t lastLoopTime;
+
 void setup() {
     pinMode(12, OUTPUT);
     pinMode(13, OUTPUT);
@@ -43,13 +45,16 @@ void setup() {
     pos[1] = tar[1];
     pos[2] = tar[2];
     yaw = yawTar;
+    lastLoopTime = 0;
 }
 
 void loop() {
     // General loop running LED.
     digitalWrite(13, HIGH);
 
+    Serial.println("Before");
     yaw = instruments.setPos(pos);
+    Serial.println("After");
 
     // Comment/uncomment these out to enable/disable hover only.
     pos[0] = tar[0];
@@ -63,5 +68,6 @@ void loop() {
     if (autopilotActive) {
         digitalWrite(12, HIGH);
     }
-
+    logger.log("System", "TPS: " + String(1000/(millis() - lastLoopTime)));
+    lastLoopTime = millis();
 }
