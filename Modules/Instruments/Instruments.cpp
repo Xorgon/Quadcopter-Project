@@ -10,6 +10,7 @@ Instruments::Instruments(SerialLogger *logger, uint8_t softSerialRX, uint8_t sof
     this->logger = logger;
     mspSerial = new SoftwareSerial(softSerialRX, softSerialTX);
     mspSerial->begin(57600);
+    pinMode(13, OUTPUT);
 }
 
 /**
@@ -22,8 +23,9 @@ float Instruments::setPos(float *pos) {
     // Send MSP Request:
     uint8_t data = 0;
     sendMSPRequest(MSP_ATTITUDE, &data, 0);
-
+    digitalWrite(13, HIGH);
     while (!mspSerial->available()) {}
+    digitalWrite(13, LOW);
     float attitude[3];
 
     bool valid = false;
