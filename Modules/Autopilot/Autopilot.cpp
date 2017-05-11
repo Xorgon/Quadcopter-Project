@@ -16,8 +16,6 @@ Autopilot::Autopilot(SerialLogger *logger) {
     yawPWM.attach(YAW_PWM_PIN);
     throttlePWM.attach(THROTTLE_PWM_PIN);
 
-    attachInterrupt(0, onRising, RISING);
-
     autopilotActive = false;
     lastActive = false;
 
@@ -25,9 +23,22 @@ Autopilot::Autopilot(SerialLogger *logger) {
     pinMode(ACTIVE_LED_PIN, OUTPUT);
     digitalWrite(ACTIVE_PIN, LOW);
     digitalWrite(ACTIVE_LED_PIN, LOW);
+
+    pinMode(A5, INPUT);
 }
 
 void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
+
+    if (digitalRead(A5) == HIGH){
+        digitalWrite(ACTIVE_PIN, HIGH);
+        digitalWrite(ACTIVE_LED_PIN, HIGH);
+        autopilotActive = true;
+    } else {
+        digitalWrite(ACTIVE_PIN, LOW);
+        digitalWrite(ACTIVE_LED_PIN, LOW);
+        autopilotActive = false;
+    }
+
     if (lastActive != autopilotActive) {
         lastActive = autopilotActive;
         if (autopilotActive) {
@@ -156,27 +167,6 @@ void Autopilot::sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t th
     rollPWM.writeMicroseconds(roll + PWM_CORRECTION_NUMBER);
     yawPWM.writeMicroseconds(yaw + PWM_CORRECTION_NUMBER);
     throttlePWM.writeMicroseconds(throttle + PWM_CORRECTION_NUMBER);
-}
-
-
-static void Autopilot::onRising() {
-    attachInterrupt(0, onFalling, FALLING);
-    lastPWMTime = micros();
-}
-
-static void Autopilot::onFalling() {
-    attachInterrupt(0, onRising, RISING);
-    pwmValue = micros() - lastPWMTime;
-    if (pwmValue > (ACTIVE_PWM - ACTIVE_PWM_TOLERANCE)
-        and pwmValue < (ACTIVE_PWM + ACTIVE_PWM_TOLERANCE)) {
-        digitalWrite(ACTIVE_PIN, HIGH);
-        digitalWrite(ACTIVE_LED_PIN, HIGH);
-        autopilotActive = true;
-    } else {
-        digitalWrite(ACTIVE_PIN, LOW);
-        digitalWrite(ACTIVE_LED_PIN, LOW);
-        autopilotActive = false;
-    }
 }
 
 void Autopilot::resetPID() {

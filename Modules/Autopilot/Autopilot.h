@@ -11,8 +11,6 @@
 #include "SerialLogger.h"
 
 // These variables must be created in the main control file.
-extern volatile unsigned long lastPWMTime;
-extern volatile uint16_t pwmValue;
 extern volatile bool autopilotActive;
 
 class Autopilot {

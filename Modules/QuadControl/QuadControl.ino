@@ -23,8 +23,6 @@ uint32_t lastLoopTime;
 
 void setup() {
     pinMode(12, OUTPUT);
-    pinMode(13, OUTPUT);
-    digitalWrite(13, HIGH);
     logger = SerialLogger(11);
 
     // Comment/uncomment to enable/disable tethered logging.
@@ -49,7 +47,6 @@ void setup() {
 
 void loop() {
     // General loop running LED.
-    //digitalWrite(13, HIGH);
 
     yaw = instruments.setPos(pos);
 
@@ -60,11 +57,9 @@ void loop() {
     autopilot.run(tar, pos, yawTar, yaw);
     grabber.run(pos, tar);
 
-    //digitalWrite(13, LOW);
-
     if (autopilotActive) {
         digitalWrite(12, HIGH);
     }
-    logger.log("System", "TPS: " + String(1000/(millis() - lastLoopTime)));
+    logger.log("System", "TPS: " + String(1000 / (millis() - lastLoopTime)));
     lastLoopTime = millis();
 }
