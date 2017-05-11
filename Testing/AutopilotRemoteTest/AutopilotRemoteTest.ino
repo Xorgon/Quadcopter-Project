@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <Autopilot.h>
+#include "SerialLogger.h"
 
 volatile unsigned long lastPWMTime;
 volatile uint16_t pwmValue;
@@ -10,6 +11,7 @@ Autopilot autopilot;
 
 void setup() {
     Serial.begin(9600);
+    logger = SerialLogger(11);
     logger.sync = false;
     autopilot = Autopilot(&logger);
     autopilot.sendPWM(900, 1000, 1100, 1200);

@@ -25,73 +25,32 @@ void infrared::Calculate() {
 
     // TODO: Test this filter method and add a better filter if necessary (which it probably is).
     // change condition
-    float mean[3] = {0};
-    float sensorsum = 0;
-    float sensorValue[3] = {0};
+
+    int size = 25;
     float sensorInput[25] = {0};
-    float max;
-    float min;
+    float hold;
+    int pass;
+    float mean[3] = {0};
+    static const uint8_t analog_pins[] = {A0, A1, A2};
 
 
-    //do {
-    max = 0.0;
-    min = 10000.0;
+    for (int infrared = 0; infrared < 3; infrared++) {
 
-    for (int n = 0; n < 25; n++) {
-        sensorInput[n] = analogRead(A0);
-        delay(1);
-    }   //Body Frame x direction infrared sensor
+        for (int n = 0; n < size; n++) {
+            sensorInput[n] = analogRead(analog_pins[infrared]);
+        }   //Body Frame x direction infrared sensor
 
-    for (int n = 0; n < 25; n++) {
-        if (sensorInput[n] > max) max = sensorInput[n];
-        if (sensorInput[n] < min) min = sensorInput[n];
-        sensorsum = sensorsum + sensorInput[n];
+        for (pass = 1; pass < 25; pass++) {
+            for (int i = 0; i < size - 1; i++) {
+                if (sensorInput[i] > sensorInput[i + 1]) {
+                    hold = sensorInput[i];
+                    sensorInput[i] = sensorInput[i + 1];
+                    sensorInput[i + 1] = hold;
+                }
+            }
+        }
+        mean[infrared] = sensorInput[12];
     }
-
-
-    mean[0] = (sensorsum - max - min) / 3.0;
-    sensorsum = 0.0;        //clear and run
-    //Serial.print("mean x:");  //debug
-    //Serial.println(mean[0]);
-
-
-    //} while ((abs(analogRead(A0) - mean[0]) / mean[0]) > 0.0005);
-
-
-    do {
-        max = 0.0;
-        min = 10000.0;
-
-        for (int n = 0; n < 5; n++) { sensorInput[n] = analogRead(A1); }   //Body Frame y direction infrared sensor
-
-        for (int n = 0; n < 5; n++) {
-            if (sensorInput[n] > max) max = sensorInput[n];
-            if (sensorInput[n] < min) min = sensorInput[n];
-            sensorsum = sensorsum + sensorInput[n];
-        }
-
-        mean[1] = (sensorsum - max - min) / 3.0;
-        sensorsum = 0.0;        //clear and run
-
-    } while (abs(analogRead(A1) - mean[1]) / mean[1] > 0.0005);
-
-
-    do {
-        max = 0.0;
-        min = 10000.0;
-        for (int n = 0; n < 5; n++) { sensorInput[n] = analogRead(A2); }  //Body Frame z direction infrared sensor
-
-        for (int n = 0; n < 5; n++) {
-            if (sensorInput[n] > max) max = sensorInput[n];
-            if (sensorInput[n] < min) min = sensorInput[n];
-            sensorsum = sensorsum + sensorInput[n];
-        }
-
-        mean[2] = (sensorsum - max - min) / 3.0;
-        sensorsum = 0.0;        //clear and run
-
-
-    } while ((abs(analogRead(A2) - mean[2]) / mean[2]) > 0.0005);
 
 
     String logData = "x= " + String(mean[0])
@@ -100,6 +59,7 @@ void infrared::Calculate() {
     logger->log("Sensors", logData);
 
 
+    float sensorValue[3];
     // TODO: Individual sensor calibration.
     // To relate the sensor analogue value to distance
     sensorValue[0] = 1271938.7 * pow(mean[0],

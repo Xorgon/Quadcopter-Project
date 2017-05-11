@@ -2,6 +2,8 @@
 // Created by Elijah on 07/03/2017.
 //
 
+// TODO: Test grabber 'twitchy-ness' on proper power.
+
 #ifndef SKETCH_DISPENSE_H
 #define SKETCH_DISPENSE_H
 
@@ -16,7 +18,7 @@ class Grabber {
 public:
     Grabber();
 
-    Grabber(int servoPin, SerialLogger *logger);
+    Grabber(uint8_t servoPin, SerialLogger *logger, uint16_t closeDelay);
 
     void run(float pos[], float target[]);
 
@@ -29,9 +31,13 @@ private:
 
     Servo servo;
     SerialLogger *logger;
-    Scheduler scheduler;
 
-    void close();
+    uint16_t closeDelay;
+    uint32_t releaseTime;
+
+    bool dropped;
+
+    void checkClose();
 
 };
 

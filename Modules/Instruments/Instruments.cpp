@@ -9,7 +9,7 @@ Instruments::Instruments() {}
 Instruments::Instruments(SerialLogger *logger, uint8_t softSerialRX, uint8_t softSerialTX) {
     this->logger = logger;
     mspSerial = new SoftwareSerial(softSerialRX, softSerialTX);
-    mspSerial->begin(9600);
+    mspSerial->begin(57600);
 }
 
 /**
@@ -19,23 +19,18 @@ Instruments::Instruments(SerialLogger *logger, uint8_t softSerialRX, uint8_t sof
  */
 float Instruments::setPos(float *pos) {
 
-    // TODO: Re-enable and fix MSP requests (Naze SoftSerial interferes with Arming signal).
-//    // Send MSP Request:
-//    uint8_t data = 0;
-//    sendMSPRequest(MSP_ATTITUDE, &data, 0);
-//
-//    while (!mspSerial->available()) {}
+    // Send MSP Request:
+    uint8_t data = 0;
+    sendMSPRequest(MSP_ATTITUDE, &data, 0);
 
+    while (!mspSerial->available()) {}
     float attitude[3];
 
     bool valid = false;
 
     // Avoid any huge attitude values.
     while (!valid) {
-//        getAttitude(attitude);
-        attitude[0] = 0.0;
-        attitude[1] = 0.0;
-        attitude[2] = 0.0;
+        getAttitude(attitude);
 
         if (attitude[0] < 180 && attitude[0] > -180
                 && attitude[1] < 180 && attitude[1] > -180
@@ -48,7 +43,7 @@ float Instruments::setPos(float *pos) {
                      + ", Yaw= " + String(attitude[2]);
     logger->log("Instruments", logData);
 
-    infrared sensor;
+    infrared sensor = infrared(logger);
     sensor.setAngle(attitude[1], attitude[0], attitude[2]);
     sensor.Calculate();
 

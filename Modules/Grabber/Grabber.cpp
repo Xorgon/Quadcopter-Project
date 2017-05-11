@@ -14,12 +14,14 @@ Grabber::Grabber() {}
  * @param servoPin The pin to which the servo is connected.
  * @param logger The logger being used.
  */
-Grabber::Grabber(int servoPin, SerialLogger *logger) {
+Grabber::Grabber(uint8_t servoPin, SerialLogger *logger, uint16_t closeDelay) {
     servo = Servo();
     servo.attach(servoPin);
     servo.write(0 + SERVO_OFFSET);
     this->logger = logger;
-    scheduler = Scheduler();
+    this->closeDelay = closeDelay;
+    releaseTime = 0;
+    dropped = false;
 }
 
 /**
@@ -27,11 +29,17 @@ Grabber::Grabber(int servoPin, SerialLogger *logger) {
  */
 void Grabber::release() {
     servo.write(140 + SERVO_OFFSET);
-    scheduler.schedule(this->close); // TODO: Test scheduler.
+    releaseTime = millis();
+    logger->log(F("Grabber"), F("Released payload."));
+    dropped = true;
 }
 
-void Grabber::close() {
-    servo.write(0 + SERVO_OFFSET);
+void Grabber::checkClose() {
+    if (millis() - releaseTime > closeDelay && releaseTime != 0) {
+        servo.write(0 + SERVO_OFFSET);
+        releaseTime = 0;
+        logger->log(F("Grabber"), F("Closed."));
+    }
 }
 
 /**
@@ -40,11 +48,10 @@ void Grabber::close() {
  * @param target Target position vector.
  */
 void Grabber::run(float *pos, float *target) {
-    scheduler.update();
-    if (fabs(pos[0] - target[0]) < posTolerance,
-            fabs(pos[1] - target[1]) < posTolerance,
-            fabs(pos[2] - target[2]) < posTolerance) {
+    checkClose();
+    if (fabs(pos[0] - target[0]) < posTolerance &&
+            fabs(pos[1] - target[1]) < posTolerance &&
+            fabs(pos[2] - target[2]) < posTolerance && !dropped) {
         release();
-        logger->log(F("Grabber"), F("Released payload."));
     }
 }

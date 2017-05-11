@@ -9,15 +9,7 @@ Autopilot::Autopilot() {}
 Autopilot::Autopilot(SerialLogger *logger) {
     this->logger = logger;
 
-    lastErrX = 999;
-    lastErrY = 999;
-    lastErrZ = 999;
-
-    yawIntegral = 0;
-    throttleIntegral = 0;
-
-    lastYawTime = 0;
-    lastThrottleTime = 0;
+    resetPID();
 
     pitchPWM.attach(PITCH_PWM_PIN);
     rollPWM.attach(ROLL_PWM_PIN);
@@ -42,6 +34,7 @@ void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
             logger->log(AUTOPILOT_LOGGER_TAG, "Autopilot activated.");
         } else {
             logger->log(AUTOPILOT_LOGGER_TAG, "Autopilot deactivated.");
+            resetPID();
         }
     }
 
@@ -147,9 +140,11 @@ uint16_t Autopilot::calculateThrottle(float errZ) {
     lastThrottleTime = now;
 
     if (int(pwmOut - THROTTLE_CENTER) > 0 && int(pwmOut - THROTTLE_CENTER) > MAX_THROTTLE) {
-        pwmOut = THROTTLE_CENTER + MAX_THROTTLE; }
+        pwmOut = THROTTLE_CENTER + MAX_THROTTLE;
+    }
     if (int(pwmOut - THROTTLE_CENTER) < 0 && -(int(pwmOut - THROTTLE_CENTER)) > MIN_THROTTLE) {
-        pwmOut = THROTTLE_CENTER - MIN_THROTTLE; }
+        pwmOut = THROTTLE_CENTER - MIN_THROTTLE;
+    }
 
     return pwmOut;
 }
@@ -170,16 +165,37 @@ static void Autopilot::onRising() {
 }
 
 static void Autopilot::onFalling() {
-    attachInterrupt(0, onRising, RISING);
+//    attachInterrupt(0, onRising, RISING);
     pwmValue = micros() - lastPWMTime;
     if (pwmValue > (ACTIVE_PWM - ACTIVE_PWM_TOLERANCE)
         and pwmValue < (ACTIVE_PWM + ACTIVE_PWM_TOLERANCE)) {
         digitalWrite(ACTIVE_PIN, HIGH);
         digitalWrite(ACTIVE_LED_PIN, HIGH);
         autopilotActive = true;
+        attachInterrupt(0, onRising, RISING);
     } else {
-        digitalWrite(ACTIVE_PIN, LOW);
-        digitalWrite(ACTIVE_LED_PIN, LOW);
-        autopilotActive = false;
+        if (autopilotActive = true) {
+            digitalWrite(ACTIVE_PIN, LOW);
+            digitalWrite(ACTIVE_LED_PIN, LOW);
+            autopilotActive = false;
+        } else {
+            attachInterrupt(0, onRising, RISING);
+            digitalWrite(ACTIVE_PIN, LOW);
+            digitalWrite(ACTIVE_LED_PIN, LOW);
+            autopilotActive = false;
+        }
+
     }
+}
+
+void Autopilot::resetPID() {
+    lastErrX = 999;
+    lastErrY = 999;
+    lastErrZ = 999;
+
+    yawIntegral = 0;
+    throttleIntegral = 0;
+
+    lastYawTime = 0;
+    lastThrottleTime = 0;
 }
