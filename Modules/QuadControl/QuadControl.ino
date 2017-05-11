@@ -57,8 +57,6 @@ void loop() {
     pos[0] = tar[0];
     pos[1] = tar[1];
 
-    Serial.println(pwmValue);
-
     autopilot.run(tar, pos, yawTar, yaw);
     grabber.run(pos, tar);
 
