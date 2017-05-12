@@ -20,26 +20,33 @@ Instruments::Instruments(SerialLogger *logger, uint8_t softSerialRX, uint8_t sof
  */
 float Instruments::setPos(float *pos) {
 
-    // Send MSP Request:
-    uint8_t data = 0;
-    sendMSPRequest(MSP_ATTITUDE, &data, 0);
-    digitalWrite(13, HIGH);
-    while (!mspSerial->available()) {}
-    digitalWrite(13, LOW);
     float attitude[3];
-
     bool valid = false;
+
+    digitalWrite(13, HIGH);
 
     // Avoid any huge attitude values.
     while (!valid) {
+        // Send MSP Request:
+        uint8_t data = 0;
+        sendMSPRequest(MSP_ATTITUDE, &data, 0);
+        while (!mspSerial->available()) {}
+
         getAttitude(attitude);
 
         if (attitude[0] < 180 && attitude[0] > -180
-                && attitude[1] < 180 && attitude[1] > -180
-                && attitude[3] <= 360 && attitude[3] >= 0) {
-            valid = true;
+            && attitude[1] < 180 && attitude[1] > -180
+            && attitude[2] <= 360 && attitude[2] >= 0) {
+            if (attitude[0] != 0 && attitude[1] != 0 && attitude[2] != 0) {
+                valid = true;
+            }
+        } else {
+            logger->log("ERROR", "Roll= " + String(attitude[0])
+                                 + ", Pitch= " + String(attitude[1])
+                                 + ", Yaw= " + String(attitude[2]));
         }
     }
+    digitalWrite(13, LOW);
     String logData = "Roll= " + String(attitude[0])
                      + ", Pitch= " + String(attitude[1])
                      + ", Yaw= " + String(attitude[2]);
@@ -49,9 +56,9 @@ float Instruments::setPos(float *pos) {
     sensor.setAngle(attitude[1], attitude[0], attitude[2]);
     sensor.Calculate();
 
-    pos[0] = sensor.GetDistanceX()/100.0;
-    pos[1] = sensor.GetDistanceY()/100.0;
-    pos[2] = sensor.GetDistanceZ()/100.0;
+    pos[0] = sensor.GetDistanceX() / 100.0;
+    pos[1] = sensor.GetDistanceY() / 100.0;
+    pos[2] = sensor.GetDistanceZ() / 100.0;
 
     logData = "x= " + String(pos[0]) + ", y= " + String(pos[1]) + ", z= " + String(pos[2]);
     logger->log("Instruments", logData);
@@ -123,7 +130,7 @@ void Instruments::getAttitude(float *attitude) {
         }
     }
 
-    attitude[0] = roll/10.0;
-    attitude[1] = pitch/10.0;
+    attitude[0] = roll / 10.0;
+    attitude[1] = pitch / 10.0;
     attitude[2] = yaw;
 }
