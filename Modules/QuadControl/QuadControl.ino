@@ -70,6 +70,6 @@ void loop() {
     if (autopilotActive) {
         digitalWrite(12, HIGH);
     }
-    logger.log("System", "TPS: " + String(1000 / (millis() - lastLoopTime)));
+    logger.log(F("Sys"), "TPS: " + String(1000 / (millis() - lastLoopTime)));
     lastLoopTime = millis();
 }

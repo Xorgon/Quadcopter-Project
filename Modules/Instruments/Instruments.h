@@ -14,6 +14,8 @@
 
 #define MSP_ATTITUDE 108
 
+#define INSTRUMENTS_LOGGER_TAG F("Instr")
+
 class Instruments {
 public:
     Instruments();

@@ -69,7 +69,7 @@ private:
 
     SerialLogger *logger;
 
-#define AUTOPILOT_LOGGER_TAG "Autopilot"
+#define AUTOPILOT_LOGGER_TAG F("Auto")
 
 #define ACTIVE_PWM 1900
 #define ACTIVE_PWM_TOLERANCE 100

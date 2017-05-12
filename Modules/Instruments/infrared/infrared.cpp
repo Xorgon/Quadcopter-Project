@@ -53,9 +53,9 @@ void infrared::Calculate() {
     }
 
 
-    String logData = "x= " + String(mean[0])
-                     + ", y= " + String(mean[1])
-                     + ", z= " + String(mean[2]);
+    String logData = "x=" + String(mean[0])
+                     + ", y=" + String(mean[1])
+                     + ", z=" + String(mean[2]);
     logger->log("Sensors", logData);
 
 

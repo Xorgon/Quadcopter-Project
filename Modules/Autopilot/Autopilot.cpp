@@ -42,9 +42,9 @@ void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
     if (lastActive != autopilotActive) {
         lastActive = autopilotActive;
         if (autopilotActive) {
-            logger->log(AUTOPILOT_LOGGER_TAG, "Autopilot activated.");
+            logger->log(AUTOPILOT_LOGGER_TAG, F("Autopilot activated."));
         } else {
-            logger->log(AUTOPILOT_LOGGER_TAG, "Autopilot deactivated.");
+            logger->log(AUTOPILOT_LOGGER_TAG, F("Autopilot deactivated."));
             resetPID();
         }
     }
@@ -75,9 +75,9 @@ uint16_t Autopilot::calculatePitch(float errX) {
 
     uint16_t pwmOut = 1500 + roundf(pdOut * PITCH_PD_PWM_FACTOR);
 
-    String logData = " Pitch | pdOut= " + String(pdOut)
-                     + ", pwmOut= " + String(pwmOut);
-    logger->log("Autopilot", logData);
+    String logData = " Pitch: PID=" + String(pdOut)
+                     + ", pwm=" + String(pwmOut);
+    logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
     lastErrX = errX;
 
@@ -96,9 +96,9 @@ uint16_t Autopilot::calculateRoll(float errY) {
 
     uint16_t pwmOut = 1500 + roundf(pdOut * ROLL_PD_PWM_FACTOR);
 
-    String logData = " Roll | pdOut= " + String(pdOut)
-                     + ", pwmOut= " + String(pwmOut);
-    logger->log("Autopilot", logData);
+    String logData = " Roll: PID=" + String(pdOut)
+                     + ", pwm=" + String(pwmOut);
+    logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
     lastErrY = errY;
 
@@ -119,9 +119,9 @@ uint16_t Autopilot::calculateYaw(float errYaw) {
 
     uint16_t pwmOut = 1500 + roundf(pdOut * YAW_PI_PWM_FACTOR);
 
-    String logData = " Yaw | pdOut= " + String(pdOut)
-                     + ", pwmOut= " + String(pwmOut);
-    logger->log("Autopilot", logData);
+    String logData = " Yaw: PID=" + String(pdOut)
+                     + ", pwm=" + String(pwmOut);
+    logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
     lastYawTime = now;
 
@@ -143,9 +143,9 @@ uint16_t Autopilot::calculateThrottle(float errZ) {
 
     uint16_t pwmOut = THROTTLE_CENTER + roundf(pdOut * THROTTLE_PI_PWM_FACTOR);
 
-    String logData = " Throttle | pdOut= " + String(pdOut)
-                     + ", pwmOut= " + String(pwmOut);
-    logger->log("Autopilot", logData);
+    String logData = " Throttle: PID=" + String(pdOut)
+                     + ", pwm=" + String(pwmOut);
+    logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
     lastErrZ = errZ;
     lastThrottleTime = now;

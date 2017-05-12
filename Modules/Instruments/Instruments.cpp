@@ -41,16 +41,16 @@ float Instruments::setPos(float *pos) {
                 valid = true;
             }
         } else {
-            logger->log("ERROR", "Roll= " + String(attitude[0])
-                                 + ", Pitch= " + String(attitude[1])
-                                 + ", Yaw= " + String(attitude[2]));
+            logger->log(F("ERROR"), "R=" + String(attitude[0])
+                                 + ", P=" + String(attitude[1])
+                                 + ", Y=" + String(attitude[2]));
         }
     }
     digitalWrite(13, LOW);
-    String logData = "Roll= " + String(attitude[0])
-                     + ", Pitch= " + String(attitude[1])
-                     + ", Yaw= " + String(attitude[2]);
-    logger->log("Instruments", logData);
+    String logData = "R=" + String(attitude[0])
+                     + ", P=" + String(attitude[1])
+                     + ", Y=" + String(attitude[2]);
+    logger->log(INSTRUMENTS_LOGGER_TAG, logData);
 
     infrared sensor = infrared(logger);
     sensor.setAngle(attitude[1], attitude[0], attitude[2]);
@@ -60,8 +60,8 @@ float Instruments::setPos(float *pos) {
     pos[1] = sensor.GetDistanceY() / 100.0;
     pos[2] = sensor.GetDistanceZ() / 100.0;
 
-    logData = "x= " + String(pos[0]) + ", y= " + String(pos[1]) + ", z= " + String(pos[2]);
-    logger->log("Instruments", logData);
+    logData = "x=" + String(pos[0]) + ", y=" + String(pos[1]) + ", z=" + String(pos[2]);
+    logger->log(INSTRUMENTS_LOGGER_TAG, logData);
 
     return attitude[2];
 }
