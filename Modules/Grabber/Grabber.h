@@ -8,7 +8,7 @@
 #define SKETCH_DISPENSE_H
 
 #include <Arduino.h>
-#include <Servo.h>
+#include <ServoTimer2.h>
 #include "math.h"
 #include "SerialLogger.h"
 
@@ -29,7 +29,7 @@ private:
     // Positional tolerance in meters.
 #define posTolerance 0.1
 
-    Servo servo;
+    ServoTimer2 servo;
     SerialLogger *logger;
 
     uint16_t closeDelay;

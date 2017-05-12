@@ -30,6 +30,9 @@ void setup() {
 
     Serial.begin(57600);
     autopilot = Autopilot(&logger);
+
+    autopilot.activeOverride = true;
+
     grabber = Grabber(7, &logger, 3000);
     instruments = Instruments(&logger, 8, 9);
     tar[0] = 1.0;

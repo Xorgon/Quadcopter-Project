@@ -7,7 +7,7 @@
 
 #include <Arduino.h>
 #include <math.h>
-#include <Servo.h>
+#include <ServoTimer2.h>
 #include "SerialLogger.h"
 
 // These variables must be created in the main control file.
@@ -81,14 +81,10 @@ private:
 #define YAW_PWM_PIN 5
 #define THROTTLE_PWM_PIN 6
 
-    Servo pitchPWM;
-    Servo yawPWM;
-    Servo rollPWM;
-    Servo throttlePWM;
-
-    static void onRising();
-
-    static void onFalling();
+    ServoTimer2 pitchPWM;
+    ServoTimer2 yawPWM;
+    ServoTimer2 rollPWM;
+    ServoTimer2 throttlePWM;
 
     void resetPID();
 

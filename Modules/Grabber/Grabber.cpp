@@ -15,7 +15,6 @@ Grabber::Grabber() {}
  * @param logger The logger being used.
  */
 Grabber::Grabber(uint8_t servoPin, SerialLogger *logger, uint16_t closeDelay) {
-    servo = Servo();
     servo.attach(servoPin);
     servo.write(0 + SERVO_OFFSET);
     this->logger = logger;

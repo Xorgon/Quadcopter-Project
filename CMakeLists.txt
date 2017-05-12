@@ -12,6 +12,7 @@ include_directories(Modules/Grabber/)
 include_directories(libraries/PetitFS/src)
 include_directories(libraries/Scheduler)
 include_directories(libraries/SD/src)
+include_directories(libraries/ServoTimer2)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
