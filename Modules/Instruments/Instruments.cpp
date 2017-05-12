@@ -8,8 +8,8 @@ Instruments::Instruments() {}
 
 Instruments::Instruments(SerialLogger *logger, uint8_t softSerialRX, uint8_t softSerialTX) {
     this->logger = logger;
-    mspSerial = new SoftwareSerial(softSerialRX, softSerialTX);
-    mspSerial->begin(57600);
+    mspSerial = new AltSoftSerial(softSerialRX, softSerialTX);
+    mspSerial->begin(9600);
     pinMode(13, OUTPUT);
 }
 

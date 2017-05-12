@@ -13,6 +13,8 @@ include_directories(libraries/PetitFS/src)
 include_directories(libraries/Scheduler)
 include_directories(libraries/SD/src)
 include_directories(libraries/ServoTimer2)
+include_directories(libraries/AltSoftSerial)
+include_directories(libraries/MemoryFree)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 

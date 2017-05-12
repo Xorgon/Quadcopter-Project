@@ -89,3 +89,4 @@ cmake-build-debug/*
 
 # Arduino libraries to be excluded
 libraries/SD/*
+libraries/MemoryFree/*

@@ -1,8 +1,8 @@
-#include <SoftwareSerial.h>
+#include <AltSoftSerial.h>
 
 #define MSP_ATTITUDE 108
 
-SoftwareSerial mspSerial(3, 4); // RX TX
+AltSoftSerial mspSerial(8, 9); // RX TX
 
 void setup() {
     mspSerial.begin(9600);

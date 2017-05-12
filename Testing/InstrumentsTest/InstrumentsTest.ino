@@ -10,7 +10,7 @@ float yaw;
 
 void setup() {
     logger = SerialLogger(11);
-    Serial.begin(57600);
+    Serial.begin(19200);
     instruments = Instruments(&logger, 8, 9);
     logger.sync = false;
     pos[0] = 1.0;
