@@ -35,13 +35,13 @@ void setup() {
     tar[0] = 1.0;
     tar[1] = 1.0;
     tar[2] = 0.8;
-    yawTar = 0;
+    yawTar = -1;
 
     // Ensure nothing happens until actual values are acquired.
     pos[0] = tar[0];
     pos[1] = tar[1];
     pos[2] = tar[2];
-    yaw = yawTar;
+    yaw = -1;
     lastLoopTime = 0;
 }
 
@@ -49,6 +49,13 @@ void loop() {
     // General loop running LED.
 
     yaw = instruments.setPos(pos);
+
+    // Comment/uncomment to enable/disable yaw processing.
+    yawTar = yaw;
+
+    if (yawTar == -1) {
+        yawTar = yaw;
+    }
 
     // Comment/uncomment these out to enable/disable hover only.
     pos[0] = tar[0];
