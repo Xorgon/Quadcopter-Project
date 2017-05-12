@@ -24,12 +24,12 @@ Autopilot::Autopilot(SerialLogger *logger) {
     digitalWrite(ACTIVE_PIN, LOW);
     digitalWrite(ACTIVE_LED_PIN, LOW);
 
-    pinMode(A5, INPUT);
+    pinMode(A5, INPUT_PULLUP);
 }
 
 void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
 
-    if (digitalRead(A5) == HIGH){
+    if (digitalRead(A5) == LOW || activeOverride){
         digitalWrite(ACTIVE_PIN, HIGH);
         digitalWrite(ACTIVE_LED_PIN, HIGH);
         autopilotActive = true;
