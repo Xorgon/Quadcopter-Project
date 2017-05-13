@@ -27,6 +27,7 @@ public:
     uint16_t calculateThrottle(float errZ); // PI
 
     void sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t throttle);
+    void sendPWM(uint16_t pitch, uint16_t roll, uint16_t throttle);
 
     bool activeOverride = false;
 
@@ -82,7 +83,7 @@ private:
 #define THROTTLE_PWM_PIN 6
 
     ServoTimer2 pitchPWM;
-    ServoTimer2 yawPWM;
+//    ServoTimer2 yawPWM; // Disabled to allow Grabber servo object to exist.
     ServoTimer2 rollPWM;
     ServoTimer2 throttlePWM;
 

@@ -17,7 +17,7 @@ Autopilot::Autopilot(SerialLogger *logger) {
 
     pitchPWM.attach(PITCH_PWM_PIN);
     rollPWM.attach(ROLL_PWM_PIN);
-    yawPWM.attach(YAW_PWM_PIN);
+//    yawPWM.attach(YAW_PWM_PIN);
     throttlePWM.attach(THROTTLE_PWM_PIN);
 
     autopilotActive = false;
@@ -70,7 +70,7 @@ void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
         sendPWM(
                 calculatePitch(err[0]),
                 calculateRoll(err[1]),
-                calculateYaw(yawTar - yaw),
+//                calculateYaw(yawTar - yaw),
                 calculateThrottle(err[2])
         );
     }
@@ -205,7 +205,20 @@ uint16_t Autopilot::calculateThrottle(float errZ) {
 void Autopilot::sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t throttle) {
     pitchPWM.write(pitch + PWM_CORRECTION_NUMBER);
     rollPWM.write(roll + PWM_CORRECTION_NUMBER);
-    yawPWM.write(yaw + PWM_CORRECTION_NUMBER);
+//    yawPWM.write(yaw + PWM_CORRECTION_NUMBER); // Removed for compiling.
+    throttlePWM.write(throttle + PWM_CORRECTION_NUMBER);
+}
+
+/**
+ * Sends pwm signals to the control Servo outputs except for yaw.
+ *
+ * @param pitch Pitch PWM value.
+ * @param roll Roll PWM value.
+ * @param throttle Throttle PWM value.
+ */
+void Autopilot::sendPWM(uint16_t pitch, uint16_t roll, uint16_t throttle) {
+    pitchPWM.write(pitch + PWM_CORRECTION_NUMBER);
+    rollPWM.write(roll + PWM_CORRECTION_NUMBER);
     throttlePWM.write(throttle + PWM_CORRECTION_NUMBER);
 }
 
