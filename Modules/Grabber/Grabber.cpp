@@ -16,7 +16,7 @@ Grabber::Grabber() {}
  */
 Grabber::Grabber(uint8_t servoPin, SerialLogger *logger, uint16_t closeDelay) {
     servo.attach(servoPin);
-    servo.write(0 + SERVO_OFFSET);
+    servo.write(SERVO_CLOSED_MICROS);
     this->logger = logger;
     this->closeDelay = closeDelay;
     releaseTime = 0;
@@ -27,7 +27,7 @@ Grabber::Grabber(uint8_t servoPin, SerialLogger *logger, uint16_t closeDelay) {
  * Releases the grabber.
  */
 void Grabber::release() {
-    servo.write(140 + SERVO_OFFSET);
+    servo.write(SERVO_OPEN_MICROS);
     releaseTime = millis();
     logger->log(F("Grabber"), F("Released payload."));
     dropped = true;
@@ -35,7 +35,7 @@ void Grabber::release() {
 
 void Grabber::checkClose() {
     if (millis() - releaseTime > closeDelay && releaseTime != 0) {
-        servo.write(0 + SERVO_OFFSET);
+        servo.write(SERVO_CLOSED_MICROS);
         releaseTime = 0;
         logger->log(F("Grabber"), F("Closed."));
     }

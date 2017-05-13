@@ -1,11 +1,11 @@
 #include <Arduino.h>
 #include "Autopilot.h"
-//#include "Grabber.h"
+#include "Grabber.h"
 #include "Instruments.h"
 
 // TODO: MAKE GRABBER WORK?!?!?!?!?? Currently just adding another Servo kills the universe. Memory not a problem.
 
-//Grabber grabber;
+Grabber grabber;
 Autopilot autopilot;
 Instruments instruments;
 SerialLogger logger;
@@ -28,14 +28,15 @@ void setup() {
     logger = SerialLogger(11);
 
     // Comment/uncomment to enable/disable tethered logging.
-    logger.sync = false;
+//    logger.sync = false;
 
     Serial.begin(19200);
     autopilot = Autopilot(&logger);
 
-    autopilot.activeOverride = true;
+    // Comment/uncomment to enable/disable autopilot active override.
+//    autopilot.activeOverride = true;
 
-//    grabber = Grabber(7, &logger, 3000);
+    grabber = Grabber(7, &logger, 3000);
     instruments = Instruments(&logger, 8, 9);
     tar[0] = 1.0;
     tar[1] = 1.0;
@@ -67,7 +68,7 @@ void loop() {
     pos[1] = tar[1];
 
     autopilot.run(tar, pos, yawTar, yaw);
-//    grabber.run(pos, tar);
+    grabber.run(pos, tar);
 
     if (autopilotActive) {
         digitalWrite(12, HIGH);

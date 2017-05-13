@@ -4,13 +4,12 @@
 
 SerialLogger logger;
 Grabber grabber;
-Servo servo;
 
 void setup() {
     Serial.begin(9600);
     logger = SerialLogger(11);
     logger.sync = false;
-    grabber = Grabber(7, &logger, 5000);
+    grabber = Grabber(7, &logger, 3000);
     grabber.release();
 }
 

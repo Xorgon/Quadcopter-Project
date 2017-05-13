@@ -12,7 +12,8 @@
 #include "math.h"
 #include "SerialLogger.h"
 
-#define SERVO_OFFSET 4
+#define SERVO_CLOSED_MICROS 875
+#define SERVO_OPEN_MICROS 2300
 
 class Grabber {
 public:
