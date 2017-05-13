@@ -15,7 +15,7 @@ volatile uint16_t pwmValue;
 Logger logger;
 
 void setup() {
-    Serial.begin(57600);
+    Serial.begin(19200);
     logger = Logger(4);
 
     attachInterrupt(0, onRising, RISING);
