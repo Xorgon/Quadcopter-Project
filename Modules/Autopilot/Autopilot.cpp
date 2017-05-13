@@ -6,6 +6,10 @@
 
 Autopilot::Autopilot() {}
 
+/**
+ * Initializes the Autopilot object.
+ * @param logger Pointer to a SerialLogger.
+ */
 Autopilot::Autopilot(SerialLogger *logger) {
     this->logger = logger;
 
@@ -27,6 +31,14 @@ Autopilot::Autopilot(SerialLogger *logger) {
     pinMode(A5, INPUT_PULLUP);
 }
 
+/**
+ * Runs the autopilot loop code. First checking whether it is active, then running the PIDs, then sending the PWM signal
+ * to the flight controller.
+ * @param tar Target location vector {x, y, z} (meters).
+ * @param loc Current location vector {x, y, z} (meters).
+ * @param yawTar Yaw target (degrees).
+ * @param yaw Current yaw (degrees).
+ */
 void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
 
     if (digitalRead(A5) == LOW || activeOverride){
@@ -64,6 +76,11 @@ void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
     }
 }
 
+/**
+ * Calculates the pitch PWM value based on positional error in the x direction.
+ * @param errX Error (meters) in the x direction.
+ * @return Pitch PWM value.
+ */
 uint16_t Autopilot::calculatePitch(float errX) {
     if (lastErrX == 999) {
         lastErrX = errX;
@@ -87,6 +104,11 @@ uint16_t Autopilot::calculatePitch(float errX) {
     return pwmOut;
 }
 
+/**
+ * Calculates the roll PWM value based on positional error in the y direction.
+ * @param errY Error (meters) in the y direction.
+ * @return Roll PWM value.
+ */
 uint16_t Autopilot::calculateRoll(float errY) {
     if (lastErrY == 999) {
         lastErrY = errY;
@@ -108,6 +130,11 @@ uint16_t Autopilot::calculateRoll(float errY) {
     return pwmOut;
 }
 
+/**
+ * Calculates the yaw PWM value based on positional error of yaw.
+ * @param errYaw Error (degrees) of yaw.
+ * @return Yaw PWM value.
+ */
 uint16_t Autopilot::calculateYaw(float errYaw) {
     uint32_t now = millis();
     if (lastYawTime == 0) {
@@ -128,6 +155,11 @@ uint16_t Autopilot::calculateYaw(float errYaw) {
     return pwmOut;
 }
 
+/**
+ * Calculates the throttle PWM value based on positional error in the z direction.
+ * @param errZ Error (meters) in the z direction.
+ * @return Throttle PWM value.
+ */
 uint16_t Autopilot::calculateThrottle(float errZ) {
     if (lastErrZ == 999) {
         lastErrZ = errZ;
@@ -162,6 +194,14 @@ uint16_t Autopilot::calculateThrottle(float errZ) {
 
 #define PWM_CORRECTION_NUMBER -2
 
+/**
+ * Sends pwm signals to the control Servo outputs.
+ *
+ * @param pitch Pitch PWM value.
+ * @param roll Roll PWM value.
+ * @param yaw Yaw PWM value.
+ * @param throttle Throttle PWM value.
+ */
 void Autopilot::sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t throttle) {
     pitchPWM.write(pitch + PWM_CORRECTION_NUMBER);
     rollPWM.write(roll + PWM_CORRECTION_NUMBER);
@@ -169,6 +209,9 @@ void Autopilot::sendPWM(uint16_t pitch, uint16_t roll, uint16_t yaw, uint16_t th
     throttlePWM.write(throttle + PWM_CORRECTION_NUMBER);
 }
 
+/**
+ * Resets the PID loops.
+ */
 void Autopilot::resetPID() {
     lastErrX = 999;
     lastErrY = 999;
