@@ -92,9 +92,9 @@ uint16_t Autopilot::calculatePitch(float errX) {
 
     uint16_t pwmOut = 1500 + roundf(pdOut * PITCH_PD_PWM_FACTOR);
 
-    String logData = " Pitch: PID=" + String(pdOut)
-                     + ", pwm=" + String(pwmOut);
-    logger->log(AUTOPILOT_LOGGER_TAG, logData);
+//    String logData = " P: PID=" + String(pdOut)
+//                     + ", pwm=" + String(pwmOut);
+//    logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
     lastErrX = errX;
 
@@ -118,9 +118,9 @@ uint16_t Autopilot::calculateRoll(float errY) {
 
     uint16_t pwmOut = 1500 + roundf(pdOut * ROLL_PD_PWM_FACTOR);
 
-    String logData = " Roll: PID=" + String(pdOut)
-                     + ", pwm=" + String(pwmOut);
-    logger->log(AUTOPILOT_LOGGER_TAG, logData);
+//    String logData = " R: PID=" + String(pdOut)
+//                     + ", pwm=" + String(pwmOut);
+//    logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
     lastErrY = errY;
 
@@ -146,7 +146,7 @@ uint16_t Autopilot::calculateYaw(float errYaw) {
 
     uint16_t pwmOut = 1500 + roundf(pdOut * YAW_PI_PWM_FACTOR);
 
-    String logData = " Yaw: PID=" + String(pdOut)
+    String logData = " Y: PID=" + String(pdOut)
                      + ", pwm=" + String(pwmOut);
     logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
@@ -175,7 +175,7 @@ uint16_t Autopilot::calculateThrottle(float errZ) {
 
     uint16_t pwmOut = THROTTLE_CENTER + roundf(pdOut * THROTTLE_PI_PWM_FACTOR);
 
-    String logData = " Throttle: PID=" + String(pdOut)
+    String logData = " T: PID=" + String(pdOut)
                      + ", pwm=" + String(pwmOut);
     logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
