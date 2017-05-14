@@ -28,7 +28,7 @@ public:
 private:
 
     // Positional tolerance in meters.
-#define posTolerance 0.1
+#define posTolerance 0.05
 
     ServoTimer2 servo;
     SerialLogger *logger;
