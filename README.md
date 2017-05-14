@@ -83,10 +83,10 @@ volatile bool autopilotActive;
 | --- | ---------- |
 | D0 | SerialLogger RX |
 | D1 | SerialLogger TX |
-| D2 | Autopilot Activation Input |
+| D2 | ~~Autopilot PWM Activation Input~~ |
 | D3 | Pitch Servo Output |
 | D4 | Roll Servo Output |
-| D5 | Yaw Servo Output |
+| D5 | ~~Yaw Servo Output~~ |
 | D6 | Throttle Servo Output |
 | D7 | Grabber Servo Output |
 | D8 | MSP SoftSerial RX |
@@ -100,4 +100,4 @@ volatile bool autopilotActive;
 | A2 | Z-Axis IR Input |
 | A3 | |
 | A4 | |
-| A5 | |
+| A5 | Autopilot Digital Activation Input|
