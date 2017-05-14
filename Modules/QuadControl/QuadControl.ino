@@ -40,7 +40,7 @@ void setup() {
     instruments = Instruments(&logger, 8, 9);
     tar[0] = 1.0;
     tar[1] = 1.0;
-    tar[2] = 0.8;
+    tar[2] = 1.0;
     yawTar = -1;
 
     // Ensure nothing happens until actual values are acquired.
