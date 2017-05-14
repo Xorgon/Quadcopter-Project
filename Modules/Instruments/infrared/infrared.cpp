@@ -65,7 +65,7 @@ void infrared::Calculate() {
     sensorValue[0] = 1271938.7 * pow(mean[0],
                                      -1.7875687);                                        // another set of calculation could be given by
     sensorValue[1] = 176468.59 * pow(mean[1], -1.4945045);
-    sensorValue[2] = 783622.75 * pow(mean[2], -1.7171497);
+    sensorValue[2] = 2e6 * pow(mean[2] + 5, -2) + 0.05;
     //Serial.print(j);
     //Serial.print("_Absolute Value:");  //debug
     // Serial.println(sensorValue[0]);
