@@ -40,7 +40,7 @@ void SerialLogger::log(String tag, String data) {
 }
 
 /**
- * Sends data through serial commsunications.
+ * Sends data through serial communications.
  * @param logLine The string to be written.
  */
 void SerialLogger::log(String logLine) {
