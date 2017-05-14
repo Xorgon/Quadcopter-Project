@@ -37,7 +37,7 @@ private:
 
 #define MAX_PITCH 50
 #define MAX_ROLL 50
-#define MAX_THROTTLE 50
+#define MAX_THROTTLE 100
 #define MIN_THROTTLE 250
 #define THROTTLE_CENTER 1400
 
