@@ -30,7 +30,7 @@ void setup() {
     // Comment/uncomment to enable/disable tethered logging.
 //    logger.sync = false;
 
-    Serial.begin(19200);
+    Serial.begin(9600);
     autopilot = Autopilot(&logger);
 
     // Comment/uncomment to enable/disable autopilot active override.
