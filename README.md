@@ -19,7 +19,7 @@ All modules should take a parameter of a logger and invoke `logger.log(String ta
 
 ### Logger
 
-The Logger module is for SD writing. It has to main functions:
+The Logger module is for SD writing. It has two main functions:
 
 Firstly: `logger.log(String tag, String data)`
 
