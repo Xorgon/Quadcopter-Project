@@ -10,7 +10,7 @@ from time import time, sleep
 import random
 
 def run_PID(set_point=100, start_point=0,
-            K_p=0.5, K_i=0, K_d=0.1, length=5, force=0, max_out=20, noise=1):
+            K_p=0.5, K_i=0, K_d=0.1, length=5, force=0, max_out=20, noise=0):
     start_time = time()
     point = start_point
     points = [start_point]
@@ -65,13 +65,16 @@ def run_PID(set_point=100, start_point=0,
     plt.plot(times, points, times, target)
     plt.plot(times, outs, times, zero)
     plt.xlabel("Time (s)", fontsize=14)
-    plt.ylabel("Position", fontsize=14)
+    plt.ylabel("Position/Control response", fontsize=14)
     plt.title("PID Simulation Plot", fontsize=18)
     plt.text(length*0.75, set_point*0.8, r"$K_p = %.1f$" % K_p, fontsize=16)
     plt.text(length*0.75, set_point*0.7, r"$K_i = %.1f$" % K_i, fontsize=16)
     plt.text(length*0.75, set_point*0.6, r"$K_d = %.1f$" % K_d, fontsize=16)
     plt.text(length*0.75, set_point*0.5, r"$force = %.0f$" % force, fontsize=16)
     plt.text(length*0.75, set_point*0.4, r"$noise = %.0f$" % noise, fontsize=16)
+    plt.text(length*0.1, set_point*0.7, r"$Position$", fontsize=16, color="b")
+    plt.text(length*0.25, set_point*0.2, r"$Control Response$", 
+             fontsize=16, color="r")
     cur_axis = list(plt.axis())
     cur_axis[1] = length
     plt.axis(cur_axis)
