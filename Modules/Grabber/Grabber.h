@@ -2,8 +2,6 @@
 // Created by Elijah on 07/03/2017.
 //
 
-// TODO: Test grabber 'twitchy-ness' on proper power.
-
 #ifndef SKETCH_DISPENSE_H
 #define SKETCH_DISPENSE_H
 

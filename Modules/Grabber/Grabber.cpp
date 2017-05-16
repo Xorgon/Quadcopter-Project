@@ -33,6 +33,9 @@ void Grabber::release() {
     dropped = true;
 }
 
+/**
+ * Check if the grabber should be closed and act accordingly.
+ */
 void Grabber::checkClose() {
     if (millis() - releaseTime > closeDelay && releaseTime != 0) {
         servo.write(SERVO_CLOSED_MICROS);
