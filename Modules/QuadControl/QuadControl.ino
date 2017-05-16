@@ -3,8 +3,6 @@
 #include "Grabber.h"
 #include "Instruments.h"
 
-// TODO: MAKE GRABBER WORK?!?!?!?!?? Currently just adding another Servo kills the universe. Memory not a problem.
-
 Grabber grabber;
 Autopilot autopilot;
 Instruments instruments;
@@ -16,7 +14,7 @@ float pos[3];
 float yawTar;
 float yaw;
 
-// For Autopilot.
+// Originally used for autopilot interrupt system, left for any future use.
 volatile unsigned long lastPWMTime;
 volatile uint16_t pwmValue;
 volatile bool autopilotActive;
@@ -25,19 +23,28 @@ uint32_t lastLoopTime;
 
 void setup() {
     pinMode(12, OUTPUT);
+
+    // Initialize logger with status LED on pin 11.
     logger = SerialLogger(11);
 
     // Comment/uncomment to enable/disable tethered logging.
 //    logger.sync = false;
 
     Serial.begin(9600);
+
+    // Initialize autopilot with logger.
     autopilot = Autopilot(&logger);
 
     // Comment/uncomment to enable/disable autopilot active override.
 //    autopilot.activeOverride = true;
 
+    // Initialize grabber on pin 7 with logger and 3000ms delay between open and close.
     grabber = Grabber(7, &logger, 3000);
+
+    // Initialize instruments with logger and MSP software serial on pins 8 and 9.
     instruments = Instruments(&logger, 8, 9);
+
+    // Set target.
     tar[0] = 1.0;
     tar[1] = 1.0;
     tar[2] = 1.0;
@@ -52,8 +59,8 @@ void setup() {
 }
 
 void loop() {
-    // General loop running LED.
 
+    // Update position array.
     yaw = instruments.setPos(pos);
 
     // Comment/uncomment to enable/disable yaw processing.
@@ -63,16 +70,17 @@ void loop() {
         yawTar = yaw;
     }
 
-    // Comment/uncomment these out to enable/disable hover only.
+    // Comment/uncomment these to disable/enable hover only.
     pos[0] = tar[0];
     pos[1] = tar[1];
 
+    // Run autopilot.
     autopilot.run(tar, pos, yawTar, yaw);
+
+    // Run grabber.
     grabber.run(pos, tar);
 
-    if (autopilotActive) {
-        digitalWrite(12, HIGH);
-    }
-    logger.log(F("Sys"), "TPS: " + String(1000 / (millis() - lastLoopTime)));
+    // Log loops per second.
+    logger.log(F("Sys"), "LPS: " + String(1000 / (millis() - lastLoopTime)));
     lastLoopTime = millis();
 }
