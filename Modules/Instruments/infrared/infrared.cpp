@@ -23,7 +23,6 @@ infrared::infrared(SerialLogger *logger) {
 
 void infrared::Calculate() {
 
-    // TODO: Test this filter method and add a better filter if necessary (which it probably is).
     // change condition
 
     int size = 25;
@@ -60,7 +59,6 @@ void infrared::Calculate() {
 
 
     float sensorValue[3];
-    // TODO: Individual sensor calibration.
     // To relate the sensor analogue value to distance
     sensorValue[0] = 1271938.7 * pow(mean[0],
                                      -1.7875687);                                        // another set of calculation could be given by
