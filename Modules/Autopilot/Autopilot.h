@@ -74,7 +74,7 @@ private:
 
 #define ACTIVE_PWM 1900
 #define ACTIVE_PWM_TOLERANCE 100
-#define ACTIVE_PIN 10
+#define ACTIVE_PIN 10 // Pin used to activate the relay that switches between receiver and Arduino PWMs.
 #define ACTIVE_LED_PIN 12
 
 #define PITCH_PWM_PIN 3

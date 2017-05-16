@@ -4,6 +4,9 @@
 
 #include "Autopilot.h"
 
+/**
+ * Allows for declaration of an Autopilot variable without initialization.
+ */
 Autopilot::Autopilot() {}
 
 /**
@@ -23,11 +26,13 @@ Autopilot::Autopilot(SerialLogger *logger) {
     autopilotActive = false;
     lastActive = false;
 
+    // Set output pin modes and make sure they start low.
     pinMode(ACTIVE_PIN, OUTPUT);
     pinMode(ACTIVE_LED_PIN, OUTPUT);
     digitalWrite(ACTIVE_PIN, LOW);
     digitalWrite(ACTIVE_LED_PIN, LOW);
 
+    // Set activation pin mode.
     pinMode(A5, INPUT_PULLUP);
 }
 
@@ -41,7 +46,8 @@ Autopilot::Autopilot(SerialLogger *logger) {
  */
 void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
 
-    if (digitalRead(A5) == LOW || activeOverride){
+    // Checks the activation input and activeOverride to see if the autopilot should be active.
+    if (digitalRead(A5) == LOW || activeOverride) {
         digitalWrite(ACTIVE_PIN, HIGH);
         digitalWrite(ACTIVE_LED_PIN, HIGH);
         autopilotActive = true;
@@ -51,6 +57,7 @@ void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
         autopilotActive = false;
     }
 
+    // Checks whether the autopilot status has changed and logs the change.
     if (lastActive != autopilotActive) {
         lastActive = autopilotActive;
         if (autopilotActive) {
@@ -61,6 +68,7 @@ void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
         }
     }
 
+    // Runs PID calculations if the autopilot is active.
     if (autopilotActive || activeOverride) {
         float err[3];
         err[0] = tar[0] - loc[0];
@@ -82,22 +90,29 @@ void Autopilot::run(float *tar, float *loc, float yawTar, float yaw) {
  * @return Pitch PWM value.
  */
 uint16_t Autopilot::calculatePitch(float errX) {
+    // Check if the last error hasn't been set yet.
     if (lastErrX == 999) {
         lastErrX = errX;
     }
+
+    // Calculate PD controller output.
     float pdOut = KP_X * errX + KD_X * (errX - lastErrX);
 
-    // Switch reference frame (+ve x is backwards).
+    // Switch reference frame (+ve x is towards -ve pitch).
     pdOut = -pdOut;
 
+    // Convert PD controller output to PWM output.
     uint16_t pwmOut = 1500 + roundf(pdOut * PITCH_PD_PWM_FACTOR);
 
+    // Disabled to increase loops per second.
 //    String logData = " P: PID=" + String(pdOut)
 //                     + ", pwm=" + String(pwmOut);
 //    logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
+    // Set the last error for the next loop.
     lastErrX = errX;
 
+    // Ensure that the PWM output is within limits.
     if (int(pwmOut - 1500) > 0 && int(pwmOut - 1500) > MAX_PITCH) { pwmOut = 1500 + MAX_PITCH; }
     if (int(pwmOut - 1500) < 0 && -(int(pwmOut - 1500)) > MAX_PITCH) { pwmOut = 1500 - MAX_PITCH; }
 
@@ -110,20 +125,27 @@ uint16_t Autopilot::calculatePitch(float errX) {
  * @return Roll PWM value.
  */
 uint16_t Autopilot::calculateRoll(float errY) {
+    // Check if the last error hasn't been set yet.
     if (lastErrY == 999) {
         lastErrY = errY;
     }
+
+    // Calculate PD controller output.
     float pdOut = KP_Y * errY + KD_Y * (errY - lastErrY);
     // Reference frame is correct (+ve y is towards +ve roll).
 
+    // Convert PD controller output to PWM output
     uint16_t pwmOut = 1500 + roundf(pdOut * ROLL_PD_PWM_FACTOR);
 
+    // Disabled to increase loops per second.
 //    String logData = " R: PID=" + String(pdOut)
 //                     + ", pwm=" + String(pwmOut);
 //    logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
+    // Set the last error for the next loop.
     lastErrY = errY;
 
+    // Ensure that the PWM output is within limits.
     if (int(pwmOut - 1500) > 0 && int(pwmOut - 1500) > MAX_ROLL) { pwmOut = 1500 + MAX_ROLL; }
     if (int(pwmOut - 1500) < 0 && -(int(pwmOut - 1500)) > MAX_ROLL) { pwmOut = 1500 - MAX_ROLL; }
 
@@ -136,20 +158,29 @@ uint16_t Autopilot::calculateRoll(float errY) {
  * @return Yaw PWM value.
  */
 uint16_t Autopilot::calculateYaw(float errYaw) {
+    // Store the current milliseconds to reduce calls to millis().
     uint32_t now = millis();
+
+    // Check if the last calculation time hasn't been set yet.
     if (lastYawTime == 0) {
         lastYawTime = now;
     }
+
+    // Calculate the finite step integral.
     yawIntegral += (now - lastYawTime) * errYaw;
 
-    float pdOut = KP_YAW * errYaw + KI_YAW * yawIntegral / 1000;
+    // Calculate PI controller output.
+    float piOut = KP_YAW * errYaw + KI_YAW * yawIntegral / 1000;
 
-    uint16_t pwmOut = 1500 + roundf(pdOut * YAW_PI_PWM_FACTOR);
+    // Convert PI controller output to PWM output.
+    uint16_t pwmOut = 1500 + roundf(piOut * YAW_PI_PWM_FACTOR);
 
-    String logData = " Y: PID=" + String(pdOut)
+    // Log calculation data.
+    String logData = " Y: PID=" + String(piOut)
                      + ", pwm=" + String(pwmOut);
     logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
+    // Set the last calculation time for the next loop.
     lastYawTime = now;
 
     return pwmOut;
@@ -161,27 +192,38 @@ uint16_t Autopilot::calculateYaw(float errYaw) {
  * @return Throttle PWM value.
  */
 uint16_t Autopilot::calculateThrottle(float errZ) {
+    // Check if the last error hasn't been set yet.
     if (lastErrZ == 999) {
         lastErrZ = errZ;
     }
 
+    // Store the current milliseconds to reduce calls to millis().
     uint32_t now = millis();
+
+    // Check if the last calculation time hasn't been set yet.
     if (lastThrottleTime == 0) {
         lastThrottleTime = now;
     }
+
+    // Calculate the finite step integral.
     throttleIntegral += (now - lastThrottleTime) * errZ / 1000;
 
-    float pdOut = KP_Z * errZ + KI_Z * throttleIntegral + KD_Z * (errZ - lastErrZ);
+    // Calculate PID controller output.
+    float pidOut = KP_Z * errZ + KI_Z * throttleIntegral + KD_Z * (errZ - lastErrZ);
 
-    uint16_t pwmOut = THROTTLE_CENTER + roundf(pdOut * THROTTLE_PI_PWM_FACTOR);
+    // Convert PID controller output to PWM output.
+    uint16_t pwmOut = THROTTLE_CENTER + roundf(pidOut * THROTTLE_PI_PWM_FACTOR);
 
-    String logData = " T: PID=" + String(pdOut)
+    // Log calculation data.
+    String logData = " T: PID=" + String(pidOut)
                      + ", pwm=" + String(pwmOut);
     logger->log(AUTOPILOT_LOGGER_TAG, logData);
 
+    // Set the last error and last calculation time for the next loop.
     lastErrZ = errZ;
     lastThrottleTime = now;
 
+    // Ensure that the PWM output is within limits.
     if (int(pwmOut - THROTTLE_CENTER) > 0 && int(pwmOut - THROTTLE_CENTER) > MAX_THROTTLE) {
         pwmOut = THROTTLE_CENTER + MAX_THROTTLE;
     }
@@ -226,13 +268,16 @@ void Autopilot::sendPWM(uint16_t pitch, uint16_t roll, uint16_t throttle) {
  * Resets the PID loops.
  */
 void Autopilot::resetPID() {
+    // Reset last errors to the "unset" values.
     lastErrX = 999;
     lastErrY = 999;
     lastErrZ = 999;
 
+    // Reset integrals to zero.
     yawIntegral = 0;
     throttleIntegral = 0;
 
+    // Reset last times to the "unset" values.
     lastYawTime = 0;
     lastThrottleTime = 0;
 }
